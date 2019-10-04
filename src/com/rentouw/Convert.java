@@ -10,22 +10,30 @@ public class Convert {
     public static void convert(String nameManga) throws IOException {
         FileHandler handler = new FileHandler();
         String s = null;
+        String map_prefix = "00";
         Download.makePath(FileHandler.getRootFolder() + nameManga + "_cbz/");
         for (int i = 0; i < handler.readChapter(nameManga); i++) {
-            if (!FileHandler.checkFile(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga + "_" + i + ".cbz")) {
-                System.out.println("Making " + FileHandler.getRootFolder() + nameManga + "_cbz/" + i + ".cbz");
+            if (i >= 10 && i < 100) {
+                map_prefix = "0";
+            } else if (i >= 100) {
+                map_prefix = "";
+            }
+            if (!FileHandler.checkFile(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga + "_" + map_prefix + i + ".cbz")) {
+                System.out.println("Making " + FileHandler.getRootFolder() + nameManga + "_cbz/" + map_prefix + i + ".cbz");
                 try {
-                    zipFolder(Paths.get(FileHandler.getRootFolder() + nameManga + "/" + i), Paths.get(FileHandler.getRootFolder() + nameManga + "_cbz/" + i + ".cbz"));
+                    zipFolder(Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i), Paths.get(FileHandler.getRootFolder() + nameManga + "_cbz/" + map_prefix + i + ".cbz"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                new File(FileHandler.getRootFolder() + nameManga + "_cbz/" + i + ".cbz").renameTo(new File(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga + "_" + i + ".cbz"));
+                new File(FileHandler.getRootFolder() + nameManga + "_cbz/" + map_prefix + i + ".cbz").renameTo(new File(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga + "_" + map_prefix + i + ".cbz"));
 
             } else {
-                System.out.println(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga + "_" + i + ".cbz exists");
+                System.out.println(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga + "_" + map_prefix + i + ".cbz exists");
             }
         }
+        File f = new File(FileHandler.getRootFolder() + nameManga);
+        f.delete();
     }
 
     // Uses java.util.zip to create zip file

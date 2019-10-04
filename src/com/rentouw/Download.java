@@ -26,8 +26,14 @@ public class Download {
                 List<List<String>> imgs = spider.getImagesPerUrl();
                 int i = 0;
                 String imgurl;
+                String map_prefix = "00";
                 for (List<String> imgLinks : imgs) {
-                    makePath(name + "/" + i);
+                    if (i >= 10 && i < 100) {
+                        map_prefix = "0";
+                    } else if (i >= 100) {
+                        map_prefix = "";
+                    }
+                    makePath(name + "/" + map_prefix + i);
                     String prefix = "00";
                     for (int j = 0; j < imgLinks.size(); j++) {
                         if (j >= 10 && j < 100) {
@@ -37,8 +43,8 @@ public class Download {
                         }
                         imgurl = imgLinks.get(j);
                         // added root folder to check
-                        String file = FileHandler.getRootFolder() + name + "/" + i + "/" + prefix + j;
-                        String oldFile = FileHandler.getRootFolder() + name + "/" + i + "/" + j;
+                        String file = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + prefix + j;
+                        String oldFile = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + j;
                         if (!FileHandler.checkFile(file) && !FileHandler.checkFile(file + ".jpg") && !FileHandler.checkFile(file + ".png")) {
                             try {
                                 if (!FileHandler.checkFile(file) && !FileHandler.checkFile(oldFile + ".jpg") && !FileHandler.checkFile(oldFile + ".png")) {
