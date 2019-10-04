@@ -33,7 +33,7 @@ public class Convert {
             }
         }
         File f = new File(FileHandler.getRootFolder() + nameManga);
-        f.delete();
+        Utils.recursiveDelete(f);
     }
 
     // Uses java.util.zip to create zip file

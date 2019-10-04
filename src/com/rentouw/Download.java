@@ -45,23 +45,25 @@ public class Download {
                         // added root folder to check
                         String file = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + prefix + j;
                         String oldFile = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + j;
-                        if (!FileHandler.checkFile(file) && !FileHandler.checkFile(file + ".jpg") && !FileHandler.checkFile(file + ".png")) {
-                            try {
-                                if (!FileHandler.checkFile(file) && !FileHandler.checkFile(oldFile + ".jpg") && !FileHandler.checkFile(oldFile + ".png")) {
-                                    DownloadImage(imgurl, file);
-                                    Convert.checkJPG(file);
-                                } else {
-                                    new File(oldFile + ".jpg").renameTo(new File(file + ".jpg"));
-                                    new File(oldFile + ".png").renameTo(new File(file + ".png"));
-                                    System.out.println("Converted file: " + oldFile);
+                        if (!FileHandler.checkFile(FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz")) {
+                            if (!FileHandler.checkFile(file) && !FileHandler.checkFile(file + ".jpg") && !FileHandler.checkFile(file + ".png")) {
+                                try {
+                                    if (!FileHandler.checkFile(file) && !FileHandler.checkFile(oldFile + ".jpg") && !FileHandler.checkFile(oldFile + ".png")) {
+                                        DownloadImage(imgurl, file);
+                                        Convert.checkJPG(file);
+                                    } else {
+                                        new File(oldFile + ".jpg").renameTo(new File(file + ".jpg"));
+                                        new File(oldFile + ".png").renameTo(new File(file + ".png"));
+                                        System.out.println("Converted file: " + oldFile);
+                                    }
+                                } catch (Exception ex) {
+                                    System.out.println("Could not download.");
+                                    ex.getCause();
                                 }
-                            } catch (Exception ex) {
-                                System.out.println("Could not download.");
-                                ex.getCause();
-                            }
-                        } else {
+                            } else {
 //                            Convert.checkJPG(file);
-                            System.out.println("file=" + file + " exists.");
+                                System.out.println("file=" + file + " exists.");
+                            }
                         }
                     }
                     i++;

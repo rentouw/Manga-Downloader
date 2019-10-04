@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 public class Utils {
 
@@ -175,5 +172,21 @@ public class Utils {
             System.out.println(e.getMessage());
         }
         return files;
+    }
+
+    public static void recursiveDelete(File file) {
+        //to end the recursive loop
+        if (!file.exists())
+            return;
+
+        //if directory, go inside and call recursively
+        if (file.isDirectory()) {
+            for (File f : Objects.requireNonNull(file.listFiles())) {
+                //call recursively
+                recursiveDelete(f);
+            }
+        }
+        //call delete to delete files and empty directory
+        file.delete();
     }
 }
