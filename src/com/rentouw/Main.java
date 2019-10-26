@@ -56,10 +56,12 @@ public class Main {
                         }
                     }
                     ArrayList<String> files = Utils.checkNewFiles();
+                    Utils.moveNewFiles(files);
                     System.out.println("These files new:");
                     for (String out : files) {
                         System.out.println("\t" + out);
                     }
+                    System.out.println("Also available in the newFiles folder.");
                     Utils.enter();
                     break;
                 case 2:
@@ -94,7 +96,6 @@ public class Main {
                     System.exit(0);
                     break;
                 default:
-                    Utils.checkNewFiles();
                     System.out.println("Pls select 1-5.");
             }
         }

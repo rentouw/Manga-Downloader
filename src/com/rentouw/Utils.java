@@ -2,6 +2,8 @@ package com.rentouw;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -54,6 +56,7 @@ public class Utils {
                 if (correct.equals("n")) {
                     downloadBool = false;
                 }
+                System.out.println("Checking getting urls for " + name);
                 if (Download.testUrl(url)) {
                     handler.writeManga(name, url, downloadBool);
                 } else {
@@ -138,6 +141,21 @@ public class Utils {
                 } else {
                     System.out.println("\t-" + i + " " + mangaList[0] + "[" + mangaList[2] + "]");
                 }
+            }
+        }
+    }
+
+    public static void moveNewFiles(ArrayList<String> files) {
+        String root = FileHandler.getRootFolder();
+        if (!FileHandler.checkFile(root + "/newFiles/")) {
+            Download.makePath(root + "/newFiles/");
+        }
+        for (String filePath : files) {
+            File f = new File(filePath);
+            try {
+                Files.copy(Paths.get(f.getAbsolutePath()), Paths.get(root + "/newFiles/" + f.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
