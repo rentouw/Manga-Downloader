@@ -8,14 +8,6 @@ class FileHandler {
     private static final String mangaList = rootFolder + "manga.list";
     private static final String chapterList = rootFolder + "log.txt";
 
-    public static String getMangaList() {
-        return mangaList;
-    }
-
-    public static String getChapterList() {
-        return chapterList;
-    }
-
     public FileHandler() {
         if (!checkFile(mangaList)) {
             File f = new File(mangaList);
