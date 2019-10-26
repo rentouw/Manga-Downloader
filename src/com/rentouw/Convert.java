@@ -6,10 +6,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class Convert {
-    public static void convert(String nameManga) throws IOException {
+@SuppressWarnings("ALL")
+class Convert {
+    public static void convert(String nameManga) {
         FileHandler handler = new FileHandler();
-        String s = null;
         String map_prefix = "00";
         Download.makePath(FileHandler.getRootFolder() + nameManga + "_cbz/");
         for (int i = 0; i < handler.readChapter(nameManga); i++) {

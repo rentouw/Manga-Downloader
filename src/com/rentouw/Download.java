@@ -4,9 +4,11 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import java.util.Objects;
 
-public class Download {
-    private Spider spider = new Spider();
+@SuppressWarnings("ALL")
+class Download {
+    private final Spider spider = new Spider();
     private String name;
 
     Download(String urlList) {
@@ -73,16 +75,8 @@ public class Download {
         }
     }
 
-    public static boolean makePath(String path) {
-        return new File(path).mkdirs();
-    }
-
-    private int allChapters(String url) {
-        return spider.search(url).size();
-    }
-
-    public String getName() {
-        return name;
+    public static void makePath(String path) {
+        new File(path).mkdirs();
     }
 
     public static boolean testUrl(String url) {
@@ -96,7 +90,7 @@ public class Download {
         }
     }
 
-    public static void DownloadImage(String urlImg, String path) {
+    private static void DownloadImage(String urlImg, String path) {
         // Add root folder to path
         //path = FileHandler.getRootFolder() + path;
 
@@ -154,11 +148,19 @@ public class Download {
         // This is a must
 
         try {
-            outputStream.close();
-            inputStream.close();
+            Objects.requireNonNull(outputStream).close();
+            Objects.requireNonNull(inputStream).close();
         } catch (IOException e) {
             System.out.println("Error=" + e.getMessage());
         }
 
+    }
+
+    private int allChapters(String url) {
+        return spider.search(url).size();
+    }
+
+    public String getName() {
+        return name;
     }
 }

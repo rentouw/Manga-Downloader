@@ -2,15 +2,11 @@ package com.rentouw;
 
 import java.io.*;
 
-public class FileHandler {
-    private static String rootFolder = "./";
-    private static String mangaList = rootFolder + "manga.list";
-    private static String chapterList = rootFolder + "log.txt";
-    private static String errorFile = rootFolder + "error.log";
-
-    public static String getRootFolder() {
-        return rootFolder;
-    }
+@SuppressWarnings("ALL")
+class FileHandler {
+    private static final String rootFolder = "./";
+    private static final String mangaList = rootFolder + "manga.list";
+    private static final String chapterList = rootFolder + "log.txt";
 
     public static String getMangaList() {
         return mangaList;
@@ -39,6 +35,22 @@ public class FileHandler {
         }
     }
 
+    public static String getRootFolder() {
+        return rootFolder;
+    }
+
+    public static String getMangaList() {
+        return mangaList;
+    }
+
+    public static String getChapterList() {
+        return chapterList;
+    }
+
+    public static boolean checkFile(String path) {
+        return new File(path).exists();
+    }
+
     /**
      * Read the full file and return every line via a String array.
      *
@@ -46,33 +58,17 @@ public class FileHandler {
      * @return String array with every entry a line in the file
      */
     public String[] getFile(boolean fileSelecter) {
-        return getFile(fileSelecter, false);
-    }
-
-    /**
-     * Read the full file and return every line via a String array.
-     *
-     * @param fileSelecter True = mangaList False = chapterList
-     * @param error        True = give back content of error file and ignore fileSelecter's value.
-     * @return String array with every entry a line in the file
-     */
-    public String[] getFile(boolean fileSelecter, boolean error) {
         // This will reference one line at a time
-        String line = null;
+        String line;
         String[] output = new String[100];
         try {
             FileReader fileReader;
             // Assume default encoding.
-            if (error) {
-                fileReader = new FileReader(errorFile);
+            if (fileSelecter) {
+                fileReader = new FileReader(mangaList);
             } else {
-                if (fileSelecter) {
-                    fileReader = new FileReader(mangaList);
-                } else {
-                    fileReader = new FileReader(chapterList);
-                }
+                fileReader = new FileReader(chapterList);
             }
-
             // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -85,24 +81,16 @@ public class FileHandler {
             // Always close files.
             bufferedReader.close();
         } catch (FileNotFoundException ex) {
-            if (error) {
-                System.out.println("Unable to open file '" + errorFile + "'");
+            if (fileSelecter) {
+                System.out.println("Unable to open file '" + mangaList + "'");
             } else {
-                if (fileSelecter) {
-                    System.out.println("Unable to open file '" + mangaList + "'");
-                } else {
-                    System.out.println("Unable to open file '" + chapterList + "'");
-                }
+                System.out.println("Unable to open file '" + chapterList + "'");
             }
         } catch (IOException ex) {
-            if (error) {
-                System.out.println("Error reading file '" + errorFile + "'");
+            if (fileSelecter) {
+                System.out.println("Error reading file '" + mangaList + "'");
             } else {
-                if (fileSelecter) {
-                    System.out.println("Error reading file '" + mangaList + "'");
-                } else {
-                    System.out.println("Error reading file '" + chapterList + "'");
-                }
+                System.out.println("Error reading file '" + chapterList + "'");
             }
         }
 
@@ -202,34 +190,6 @@ public class FileHandler {
         return chapter;
     }
 
-    public void writeError(String error) {
-        try {
-            String[] array = getFile(false, true);
-
-            // Assume default encoding.
-            FileWriter fileWriter = new FileWriter(errorFile);
-
-            // Always wrap FileWriter in BufferedWriter.
-            BufferedWriter out = new BufferedWriter(fileWriter);
-
-
-            for (String line : array) {
-                if (line != null) {
-                    out.write(line);
-                    out.newLine();
-                }
-            }
-
-            out.append(error);
-            out.newLine();
-
-            // Always close files.
-            out.close();
-        } catch (IOException ex) {
-            System.out.println("Error writing to file '" + errorFile + "'");
-        }
-    }
-
     /**
      * Check if a url is already in the manga.list file.
      *
@@ -248,9 +208,5 @@ public class FileHandler {
             }
         }
         return output;
-    }
-
-    public static boolean checkFile(String path) {
-        return new File(path).exists();
     }
 }

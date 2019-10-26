@@ -8,7 +8,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Utils {
+@SuppressWarnings("ResultOfMethodCallIgnored")
+class Utils {
 
     /**
      * Same as read() from python.
@@ -16,7 +17,7 @@ public class Utils {
      * @param text Text to be asked.
      * @return String from users input
      */
-    public static String read(String text) {
+    private static String read(String text) {
         Scanner input = new Scanner(System.in);
         System.out.print(text);
         return input.nextLine();
@@ -25,8 +26,8 @@ public class Utils {
     /**
      * Check if a path exists.
      *
-     * @param path True = path exists
-     * @return
+     * @param path The path to the folder/file
+     * @return boolean True = path exists
      */
     public static boolean testPath(String path) {
         return new File(path).exists();
@@ -76,12 +77,11 @@ public class Utils {
         show();
         System.out.print("\tnumber of the manga to remove :");
         int number = input.nextInt();
-        ArrayList<String> newMangaList = new ArrayList<String>();
-        ArrayList<String> newChapterList = new ArrayList<String>();
+        ArrayList<String> newMangaList = new ArrayList<>();
+        ArrayList<String> newChapterList = new ArrayList<>();
         String[] mangaList = handler.getFile(true);
         if (number <= mangaList.length) {
-            for (int i = 0; i < mangaList.length; i++) {
-                String manga = mangaList[i];
+            for (String manga : mangaList) {
                 if (manga != null) {
                     if (!manga.equals(mangaList[number])) {
                         newMangaList.add(manga);
@@ -90,8 +90,7 @@ public class Utils {
             }
 
             String[] chapterList = handler.getFile(false);
-            for (int i = 0; i < chapterList.length; i++) {
-                String chapter = chapterList[i];
+            for (String chapter : chapterList) {
                 if (chapter != null) {
                     if (!chapter.equals(chapterList[number])) {
                         newChapterList.add(chapter);
@@ -174,7 +173,7 @@ public class Utils {
                 if (testPath(folder)) {
                     File map = new File(folder);
                     File[] listOfFiles = map.listFiles();
-                    for (File file : listOfFiles) {
+                    for (File file : Objects.requireNonNull(listOfFiles)) {
                         DateFormat dateFormat = new SimpleDateFormat("dd MMM");
                         Date date = Calendar.getInstance().getTime();
                         String fileDate = dateFormat.format(file.lastModified());

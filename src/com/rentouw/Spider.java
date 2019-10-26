@@ -5,21 +5,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class Spider {
-    private Set<String> pagesVisited = new HashSet<>();
-    private List<String> pagesToVisit = new LinkedList<>();
-    private List<List<String>> imagesPerUrl = new LinkedList<>();
+class Spider {
+    private final Set<String> pagesVisited = new HashSet<>();
+    private final List<String> pagesToVisit = new LinkedList<>();
+    private final List<List<String>> imagesPerUrl = new LinkedList<>();
 
     /**
      * Our main launching point for the Spider's functionality. Internally it creates spider legs
      * that make an HTTP request and parse the response (the web page).
      *
      * @param url - The starting point of the spider
-     * @return
+     * @return The amount of pages visited.
      */
     public Set<String> search(String url) {
         String currentUrl = "null";
-        SpiderLeg leg = null;
+        SpiderLeg leg;
         while (!currentUrl.equals("http://google.com")) {
             leg = new SpiderLeg();
             if (this.pagesToVisit.isEmpty()) {
@@ -40,7 +40,7 @@ public class Spider {
      * Returns the next URL to visit (in the order that they were found). We also do a check to make
      * sure this method doesn't return a URL that has already been visited.
      *
-     * @return
+     * @return the next url.
      */
     private String nextUrl() {
         String nextUrl;
