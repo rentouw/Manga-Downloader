@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="mangadownloader" default="all">
+
+
+    <property file="mangadownloader.properties"/>
+    <!-- Uncomment the following property if no tests compilation is needed -->
+    <!--
+    <property name="skip.tests" value="true"/>
+     -->
+
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <property name="compiler.max.memory" value="700m"/>
+    <patternset id="ignored.files">
+        <exclude name="**/*.hprof/**"/>
+        <exclude name="**/*.pyc/**"/>
+        <exclude name="**/*.pyo/**"/>
+        <exclude name="**/*.rbc/**"/>
+        <exclude name="**/*.yarb/**"/>
+        <exclude name="**/*~/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.git/**"/>
+        <exclude name="**/.hg/**"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/__pycache__/**"/>
+        <exclude name="**/_svn/**"/>
+        <exclude name="**/vssver.scc/**"/>
+        <exclude name="**/vssver2.scc/**"/>
+    </patternset>
+    <patternset id="library.patterns">
+        <include name="*.egg"/>
+        <include name="*.jar"/>
+        <include name="*.ear"/>
+        <include name="*.ane"/>
+        <include name="*.klib"/>
+        <include name="*.apk"/>
+        <include name="*.swc"/>
+        <include name="*.war"/>
+        <include name="*.zip"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <exclude name="**/?*.java"/>
+        <exclude name="**/?*.form"/>
+        <exclude name="**/?*.class"/>
+        <exclude name="**/?*.groovy"/>
+        <exclude name="**/?*.scala"/>
+        <exclude name="**/?*.flex"/>
+        <exclude name="**/?*.kt"/>
+        <exclude name="**/?*.clj"/>
+        <exclude name="**/?*.aj"/>
+    </patternset>
+
+    <!-- JDK definitions -->
+
+    <property name="jdk.bin.1.8.0_222" value="${jdk.home.1.8.0_222}/bin"/>
+    <path id="jdk.classpath.1.8.0_222">
+        <fileset dir="${jdk.home.1.8.0_222}">
+            <include name="jre/lib/charsets.jar"/>
+            <include name="jre/lib/ext/cldrdata.jar"/>
+            <include name="jre/lib/ext/dnsns.jar"/>
+            <include name="jre/lib/ext/jaccess.jar"/>
+            <include name="jre/lib/ext/localedata.jar"/>
+            <include name="jre/lib/ext/nashorn.jar"/>
+            <include name="jre/lib/ext/sunec.jar"/>
+            <include name="jre/lib/ext/sunjce_provider.jar"/>
+            <include name="jre/lib/ext/sunpkcs11.jar"/>
+            <include name="jre/lib/ext/zipfs.jar"/>
+            <include name="jre/lib/jce.jar"/>
+            <include name="jre/lib/jsse.jar"/>
+            <include name="jre/lib/management-agent.jar"/>
+            <include name="jre/lib/resources.jar"/>
+            <include name="jre/lib/rt.jar"/>
+            <include name="jre/lib/ext/jfxrt.jar"/>
+            <include name="jre/lib/jfxswt.jar"/>
+        </fileset>
+    </path>
+
+    <property name="project.jdk.home" value="${jdk.home.1.8.0_222}"/>
+    <property name="project.jdk.bin" value="${jdk.bin.1.8.0_222}"/>
+    <property name="project.jdk.classpath" value="jdk.classpath.1.8.0_222"/>
+
+
+    <!-- Project Libraries -->
+
+    <path id="library.jsoup-1.12.1.classpath">
+        <pathelement location="${basedir}/jsoup-1.12.1.jar"/>
+    </path>
+    <!-- Register Custom Compiler Taskdefs -->
+    <property name="javac2.home" value="${idea.home}/lib"/>
+    <path id="javac2.classpath">
+        <fileset dir="${javac2.home}">
+            <include name="javac2.jar"/>
+            <include name="jdom.jar"/>
+            <include name="asm-all*.jar"/>
+            <include name="forms-*.jar"/>
+        </fileset>
+    </path>
+    <target name="register.custom.compilers">
+        <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+        <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions"
+                 classpathref="javac2.classpath"/>
+    </target>
+
+    <!-- Modules -->
+
+
+    <!-- Module mangaDownloader -->
+
+    <dirname property="module.mangadownloader.basedir" file="${ant.file}"/>
+
+
+    <property name="module.jdk.home.mangadownloader" value="${project.jdk.home}"/>
+    <property name="module.jdk.bin.mangadownloader" value="${project.jdk.bin}"/>
+    <property name="module.jdk.classpath.mangadownloader" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.mangadownloader" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+
+    <property name="mangadownloader.output.dir"
+              value="${module.mangadownloader.basedir}/out/production/mangaDownloader"/>
+    <property name="mangadownloader.testoutput.dir" value="${module.mangadownloader.basedir}/out/test/mangaDownloader"/>
+
+    <path id="mangadownloader.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="mangadownloader.module.production.classpath">
+        <path refid="${module.jdk.classpath.mangadownloader}"/>
+        <path refid="library.jsoup-1.12.1.classpath"/>
+    </path>
+
+    <path id="mangadownloader.runtime.production.module.classpath">
+        <pathelement location="${mangadownloader.output.dir}"/>
+        <path refid="library.jsoup-1.12.1.classpath"/>
+    </path>
+
+    <path id="mangadownloader.module.classpath">
+        <path refid="${module.jdk.classpath.mangadownloader}"/>
+        <pathelement location="${mangadownloader.output.dir}"/>
+        <path refid="library.jsoup-1.12.1.classpath"/>
+    </path>
+
+    <path id="mangadownloader.runtime.module.classpath">
+        <pathelement location="${mangadownloader.testoutput.dir}"/>
+        <pathelement location="${mangadownloader.output.dir}"/>
+        <path refid="library.jsoup-1.12.1.classpath"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.mangadownloader">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.mangadownloader">
+        <patternset refid="excluded.from.module.mangadownloader"/>
+    </patternset>
+
+    <path id="mangadownloader.module.sourcepath">
+        <dirset dir="${module.mangadownloader.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.mangadownloader"
+            depends="compile.module.mangadownloader.production,compile.module.mangadownloader.tests"
+            description="Compile module mangaDownloader"/>
+
+    <target name="compile.module.mangadownloader.production" depends="register.custom.compilers"
+            description="Compile module mangaDownloader; production classes">
+        <mkdir dir="${mangadownloader.output.dir}"/>
+        <javac2 destdir="${mangadownloader.output.dir}" debug="${compiler.debug}"
+                nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
+                executable="${module.jdk.bin.mangadownloader}/javac">
+            <compilerarg line="${compiler.args.mangadownloader}"/>
+            <bootclasspath refid="mangadownloader.module.bootclasspath"/>
+            <classpath refid="mangadownloader.module.production.classpath"/>
+            <src refid="mangadownloader.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.mangadownloader"/>
+        </javac2>
+
+        <copy todir="${mangadownloader.output.dir}">
+            <fileset dir="${module.mangadownloader.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.mangadownloader.tests"
+            depends="register.custom.compilers,compile.module.mangadownloader.production"
+            description="compile module mangaDownloader; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.mangadownloader" description="cleanup module">
+        <delete dir="${mangadownloader.output.dir}"/>
+        <delete dir="${mangadownloader.testoutput.dir}"/>
+    </target>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.mangadownloader" description="cleanup all"/>
+
+    <target name="build.modules" depends="init, clean, compile.module.mangadownloader" description="build all modules"/>
+
+    <target name="init.artifacts">
+        <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+        <property name="artifact.output.download.jar" value="${basedir}/../../../Pictures/manga"/>
+        <mkdir dir="${artifacts.temp.dir}"/>
+        <property name="temp.jar.path.mangaDownloader.jar" value="${artifacts.temp.dir}/mangaDownloader.jar"/>
+    </target>
+
+    <target name="artifact.download.jar" depends="init.artifacts, compile.module.mangadownloader"
+            description="Build &#39;Download.jar&#39; artifact">
+        <property name="artifact.temp.output.download.jar" value="${artifacts.temp.dir}/Download_jar"/>
+        <mkdir dir="${artifact.temp.output.download.jar}"/>
+        <jar destfile="${temp.jar.path.mangaDownloader.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+            <zipfileset file="${basedir}/jsoup-1.12.1.jar"/>
+            <zipfileset dir="${mangadownloader.output.dir}"/>
+        </jar>
+        <copy file="${temp.jar.path.mangaDownloader.jar}"
+              tofile="${artifact.temp.output.download.jar}/mangaDownloader.jar"/>
+    </target>
+
+    <target name="build.all.artifacts" depends="artifact.download.jar" description="Build all artifacts">
+        <mkdir dir="${artifact.output.download.jar}"/>
+        <copy todir="${artifact.output.download.jar}">
+            <fileset dir="${artifact.temp.output.download.jar}"/>
+        </copy>
+
+        <!-- Delete temporary files -->
+        <delete dir="${artifacts.temp.dir}"/>
+    </target>
+
+    <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>
