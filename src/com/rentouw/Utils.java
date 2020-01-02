@@ -8,7 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 class Utils {
 
     /**

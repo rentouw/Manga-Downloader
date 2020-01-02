@@ -2,7 +2,7 @@ package com.rentouw;
 
 import java.io.*;
 
-@SuppressWarnings("ALL")
+
 class FileHandler {
     private static final String rootFolder = "./";
     private static final String mangaList = rootFolder + "manga.list";

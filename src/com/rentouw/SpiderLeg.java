@@ -38,8 +38,12 @@ class SpiderLeg {
             Elements linksOnPage = htmlDocument.select("a[href]");
             Elements imgsOnPage = htmlDocument.getElementsByAttribute("title").select("img");
             for (Element img : imgsOnPage) {
-                if (img.parent().hasClass("vung-doc")) {
-                    imgs.add(img.attr("src"));
+                if (img.parent().hasClass("container-chapter-reader")) {
+                    if (img.attr("src") != null) {
+                        imgs.add(img.attr("src"));
+                    } else {
+                        imgs.add(img.attr("data-src"));
+                    }
                 }
             }
             for (Element link : linksOnPage) {

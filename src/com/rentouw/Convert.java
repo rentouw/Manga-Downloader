@@ -6,7 +6,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-@SuppressWarnings("ALL")
+
 class Convert {
     public static void convert(String nameManga) {
         FileHandler handler = new FileHandler();

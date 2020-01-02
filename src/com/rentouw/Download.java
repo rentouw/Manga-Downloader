@@ -6,7 +6,7 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("ALL")
+
 class Download {
     private final Spider spider = new Spider();
     private String name;
