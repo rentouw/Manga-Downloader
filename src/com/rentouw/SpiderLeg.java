@@ -37,7 +37,8 @@ class SpiderLeg {
       Elements linksOnPage = htmlDocument.select("a[href]");
       Elements imgsOnPage = htmlDocument.getElementsByAttribute("title").select("img");
       for (Element img : imgsOnPage) {
-        if (img.parent().hasClass("container-chapter-reader") || img.parent().hasClass("vung-doc")) {
+        if (img.parent().hasClass("container-chapter-reader")
+            || img.parent().hasClass("vung-doc")) {
           if (img.attr("src") != null) {
             imgs.add(img.attr("src"));
           } else {
