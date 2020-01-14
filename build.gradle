@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group 'com.rentouw'
+version '1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Implementation-Title': 'Manga downloader',
+                'Main-Class': 'com.rentouw.Main'
+        )
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // jsoup HTML parser library @ https://jsoup.org/
+    compile 'org.jsoup:jsoup:1.12.1'
+}
