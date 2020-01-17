@@ -12,17 +12,13 @@ repositories {
     mavenCentral()
 }
 
-jar {
-    manifest {
-        attributes(
-                'Implementation-Title': 'Manga downloader',
-                'Main-Class': 'com.rentouw.Main'
-        )
-    }
+dependencies {
+    compile 'org.jsoup:jsoup:1.12.1'
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    // jsoup HTML parser library @ https://jsoup.org/
-    compile 'org.jsoup:jsoup:1.12.1'
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest {
+        attributes 'Main-Class': 'com.rentouw.Main'
+    }
 }
