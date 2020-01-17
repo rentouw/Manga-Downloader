@@ -1,9 +1,6 @@
 name: Java CI
 
-on:
-  push:
-    branches: 
-      - gradle
+on: push
 
 jobs:
   build:
