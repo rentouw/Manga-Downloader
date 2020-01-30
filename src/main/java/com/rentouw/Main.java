@@ -7,23 +7,25 @@ class Main {
   public static void main(String[] args) {
     Scanner input = new Scanner(System.in);
     int value;
+    readConfig();
     while (true) {
       System.out.print(
-          "        MANGA DOWNLOADER\n"
-              + "------------------------------------\n"
-              + "\t1. Download\n"
-              + "\t2. List\n"
-              + "\t3. Add\n"
-              + "\t4. Remove\n"
-              + "\t5. Exit\n"
-              + "select :");
+              "        MANGA DOWNLOADER\n"
+                      + "------------------------------------\n"
+                      + "\t1. Download\n"
+                      + "\t2. List\n"
+                      + "\t3. Add\n"
+                      + "\t4. Remove\n"
+                      + "\t5. Options\n"
+                      + "\t6. Exit\n"
+                      + "select :");
       value = input.nextInt();
       switch (value) {
         case 1:
           System.out.println("        DOWNLOAD\n" + "------------------------------------");
           FileHandler handler = new FileHandler();
-          String[] bigList = handler.getFile(true);
-          String[] oldChapterList = handler.getFile(false);
+          String[] bigList = handler.getFile(FileHandler.getMangaList());
+          String[] oldChapterList = handler.getFile(FileHandler.getChapterList());
           Download download;
           for (String list : bigList) {
             if (list != null) {
@@ -38,7 +40,7 @@ class Main {
             }
           }
 
-          String[] newChapterList = handler.getFile(false);
+          String[] newChapterList = handler.getFile(FileHandler.getChapterList());
           Utils.show();
           System.out.println("\n");
           for (int i = 0; i < newChapterList.length; i++) {
@@ -80,22 +82,45 @@ class Main {
           Utils.enter();
           break;
         case 5:
+          // WIP
+          Options.show();
+          break;
+        case 6:
           System.out.println(
-              "\nBye\n"
-                  + "                   _____\n"
-                  + "                  /     \\\n"
-                  + "                  vvvvvvv  /|__/|\n"
-                  + "                     I   /O,O   |\n"
-                  + "                     I /_____   |      /|/|\n"
-                  + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
-                  + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
-                  + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
-                  + "            \n\n");
+                  "\nBye\n"
+                          + "                   _____\n"
+                          + "                  /     \\\n"
+                          + "                  vvvvvvv  /|__/|\n"
+                          + "                     I   /O,O   |\n"
+                          + "                     I /_____   |      /|/|\n"
+                          + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
+                          + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
+                          + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
+                          + "            \n\n");
           System.exit(0);
           break;
         default:
           System.out.println("Pls select 1-5.");
       }
+    }
+  }
+
+  private static void readConfig() {
+    String mangaLocation = FileHandler.getRootFolder() + "manga.conf";
+    FileHandler handler = new FileHandler();
+    if (FileHandler.checkFile(mangaLocation)) {
+      String[] config = handler.getFile(mangaLocation);
+      String location = "ERROR";
+      for (String data : config) {
+        if (data != null) {
+          if (data.split("([$])")[0].equals("location")) {
+            location = data.split("([$])")[1];
+          }
+        }
+      }
+      Options.changeLocation(location);
+    } else {
+      handler.writeConfig(FileHandler.getRootFolder(), "location");
     }
   }
 }

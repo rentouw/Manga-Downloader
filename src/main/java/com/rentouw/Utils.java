@@ -78,7 +78,7 @@ class Utils {
     int number = input.nextInt();
     ArrayList<String> newMangaList = new ArrayList<>();
     ArrayList<String> newChapterList = new ArrayList<>();
-    String[] mangaList = handler.getFile(true);
+      String[] mangaList = handler.getFile(FileHandler.getMangaList());
     if (number <= mangaList.length) {
       for (String manga : mangaList) {
         if (manga != null) {
@@ -88,7 +88,7 @@ class Utils {
         }
       }
 
-      String[] chapterList = handler.getFile(false);
+        String[] chapterList = handler.getFile(FileHandler.getChapterList());
       for (String chapter : chapterList) {
         if (chapter != null) {
           if (!chapter.equals(chapterList[number])) {
@@ -124,20 +124,20 @@ class Utils {
   }
 
   public static void show() {
-    FileHandler handler = new FileHandler();
-    System.out.println("name(chapter)[install]");
-    String[] allMangas = handler.getFile(true);
-    String[] allChapters = handler.getFile(false);
-    for (int i = 0; i < allMangas.length; i++) {
-      String manga = allMangas[i];
-      String chapter = allChapters[i];
-      if (manga != null) {
-        String[] mangaList = manga.split("([$])");
-        if (chapter != null) {
-          String[] chapterList = chapter.split("([$])");
-          System.out.println(
-              "\t-"
-                  + i
+      FileHandler handler = new FileHandler();
+      System.out.println("name(chapter)[install]");
+      String[] allMangas = handler.getFile(FileHandler.getMangaList());
+      String[] allChapters = handler.getFile(FileHandler.getChapterList());
+      for (int i = 0; i < allMangas.length; i++) {
+          String manga = allMangas[i];
+          String chapter = allChapters[i];
+          if (manga != null) {
+              String[] mangaList = manga.split("([$])");
+              if (chapter != null) {
+                  String[] chapterList = chapter.split("([$])");
+                  System.out.println(
+                          "\t-"
+                                  + i
                   + " "
                   + mangaList[0]
                   + " ("
@@ -170,9 +170,9 @@ class Utils {
 
   public static ArrayList<String> checkNewFiles() {
     String root = FileHandler.getRootFolder();
-    FileHandler fileHandler = new FileHandler();
-    String[] mangasArray = fileHandler.getFile(true);
-    ArrayList<String> files = new ArrayList<>();
+      FileHandler fileHandler = new FileHandler();
+      String[] mangasArray = fileHandler.getFile(FileHandler.getMangaList());
+      ArrayList<String> files = new ArrayList<>();
     String folder;
     try {
       for (String mangaArray : mangasArray) {

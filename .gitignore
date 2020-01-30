@@ -74,3 +74,4 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 log.txt
 manga.list
+manga.conf
