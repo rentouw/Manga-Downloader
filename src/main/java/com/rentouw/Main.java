@@ -26,24 +26,30 @@ class Main {
           FileHandler handler = new FileHandler();
           String[] bigList = handler.getFile(FileHandler.getMangaList());
           String[] oldChapterList = handler.getFile(FileHandler.getChapterList());
-          Download download;
+          Download download = new Download("test", "init");
+          int i = 1;
           for (String list : bigList) {
             if (list != null) {
-              download = new Download(list);
+              download = new Download(list, Integer.toString(i));
+              download.start();
               try {
                 if (Boolean.parseBoolean(list.split("([$])")[2])) {
-                  Convert.convert(download.getName());
+                  Convert.convert(download.getMangaName());
                 }
               } catch (Exception e) {
                 System.out.println("error converter=" + e.getMessage());
               }
+              i += 1;
             }
+          }
+
+          while (Thread.activeCount() > 1) {
           }
 
           String[] newChapterList = handler.getFile(FileHandler.getChapterList());
           Utils.show();
           System.out.println("\n");
-          for (int i = 0; i < newChapterList.length; i++) {
+          for (i = 0; i < newChapterList.length; i++) {
             String oldchapter = oldChapterList[i];
             String newchapter = newChapterList[i];
             if (oldchapter != null) {

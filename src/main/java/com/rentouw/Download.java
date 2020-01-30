@@ -6,85 +6,16 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Objects;
 
-class Download {
-  private final Spider spider = new Spider();
-  private String name;
+class Download extends Thread {
+  private String mangaName;
+  private Thread t;
+  private String threadName;
+  private String urlList;
 
-  Download(String urlList) {
-    FileHandler handler = new FileHandler();
-    if (urlList != null) {
-      String[] array = urlList.split("([$])");
-      name = array[0];
-      String url = array[1];
-      boolean downloadBool = Boolean.parseBoolean(array[2]);
-      int oldChapter = handler.readChapter(name);
-      int newChapter = this.allChapters(url);
-      if (oldChapter != newChapter) {
-        handler.writeChapter(name, newChapter);
-      }
-      if (downloadBool) {
-        System.out.println("\tDownloading manga " + name);
-        List<List<String>> imgs = spider.getImagesPerUrl();
-        int i = 0;
-        String imgurl;
-        String map_prefix = "00";
-        for (List<String> imgLinks : imgs) {
-          if (i >= 10 && i < 100) {
-            map_prefix = "0";
-          } else if (i >= 100) {
-            map_prefix = "";
-          }
-          makePath(name + "/" + map_prefix + i);
-          String prefix = "00";
-          for (int j = 0; j < imgLinks.size(); j++) {
-            if (j >= 10 && j < 100) {
-              prefix = "0";
-            } else if (j >= 100) {
-              prefix = "";
-            }
-            imgurl = imgLinks.get(j);
-            // added root folder to check
-            String file =
-                FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + prefix + j;
-            String oldFile = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + j;
-            if (!FileHandler.checkFile(
-                FileHandler.getRootFolder()
-                    + name
-                    + "_cbz/"
-                    + name
-                    + "_"
-                    + map_prefix
-                    + i
-                    + ".cbz")) {
-              if (!FileHandler.checkFile(file)
-                  && !FileHandler.checkFile(file + ".jpg")
-                  && !FileHandler.checkFile(file + ".png")) {
-                try {
-                  if (!FileHandler.checkFile(file)
-                      && !FileHandler.checkFile(oldFile + ".jpg")
-                      && !FileHandler.checkFile(oldFile + ".png")) {
-                    DownloadImage(imgurl, file);
-                    Convert.checkJPG(file);
-                  } else {
-                    new File(oldFile + ".jpg").renameTo(new File(file + ".jpg"));
-                    new File(oldFile + ".png").renameTo(new File(file + ".png"));
-                    System.out.println("Converted file: " + oldFile);
-                  }
-                } catch (Exception ex) {
-                  System.out.println("Could not download.");
-                  ex.getCause();
-                }
-              } else {
-                //                            Convert.checkJPG(file);
-                System.out.println("file=" + file + " exists.");
-              }
-            }
-          }
-          i++;
-        }
-      }
-      System.out.println("\tDone downloading");
-    }
+  Download(String urlList, String name) {
+    threadName = "downloader-" + name;
+    this.urlList = urlList;
+    System.out.println("Creating " + threadName);
   }
 
   public static void makePath(String path) {
@@ -99,6 +30,94 @@ class Download {
     } catch (Exception ex) {
       System.out.println(ex.getMessage());
       return false;
+    }
+  }
+
+  /**
+   * @param name name of the manga.
+   */
+  private static void DownloadManga(Spider spider, String name) {
+    System.out.println("\tDownloading manga " + name);
+    List<List<String>> imgs = spider.getImagesPerUrl();
+    int i = 0;
+    String imgurl;
+    String map_prefix = "00";
+    for (List<String> imgLinks : imgs) {
+      if (i >= 10 && i < 100) {
+        map_prefix = "0";
+      } else if (i >= 100) {
+        map_prefix = "";
+      }
+      makePath(FileHandler.getRootFolder() + name + "/" + map_prefix + i);
+      String prefix = "00";
+      for (int j = 0; j < imgLinks.size(); j++) {
+        if (j >= 10 && j < 100) {
+          prefix = "0";
+        } else if (j >= 100) {
+          prefix = "";
+        }
+        imgurl = imgLinks.get(j);
+        // added root folder to check
+        String file = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + prefix + j;
+        String oldFile = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + j;
+        if (!FileHandler.checkFile(
+                FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz")) {
+          if (!FileHandler.checkFile(file)
+                  && !FileHandler.checkFile(file + ".jpg")
+                  && !FileHandler.checkFile(file + ".png")) {
+            try {
+              if (!FileHandler.checkFile(file)
+                      && !FileHandler.checkFile(oldFile + ".jpg")
+                      && !FileHandler.checkFile(oldFile + ".png")) {
+                DownloadImage(imgurl, file);
+                Convert.checkJPG(file);
+              } else {
+                new File(oldFile + ".jpg").renameTo(new File(file + ".jpg"));
+                new File(oldFile + ".png").renameTo(new File(file + ".png"));
+                //                System.out.println("Converted file: " + oldFile);
+              }
+            } catch (Exception ex) {
+              System.out.println("Could not download.");
+              ex.getCause();
+            }
+          } else {
+            //                            Convert.checkJPG(file);
+            System.out.println("file=" + file + " exists.");
+          }
+        }
+      }
+      i++;
+      Utils.recursiveDelete(new File(FileHandler.getRootFolder() + name));
+    }
+  }
+
+  public void run() {
+    System.out.println("Running " + threadName);
+    FileHandler handler = new FileHandler();
+    Spider spider = new Spider();
+    if (urlList != null) {
+      String[] array = urlList.split("([$])");
+      mangaName = array[0];
+      String url = array[1];
+      boolean downloadBool = Boolean.parseBoolean(array[2]);
+      int oldChapter = handler.readChapter(mangaName);
+      int newChapter = this.allChapters(url, spider);
+      if (oldChapter != newChapter) {
+        handler.writeChapter(mangaName, newChapter);
+      }
+      if (downloadBool) {
+        DownloadManga(spider, mangaName);
+      }
+      System.out.println("\tDone downloading");
+    }
+    System.out.println("Thread " + threadName + " exiting.");
+  }
+
+  public void start() {
+    System.out.println("Starting " + threadName);
+    if (t == null) {
+      t = new Thread(this, threadName);
+      t.start();
     }
   }
 
@@ -174,11 +193,11 @@ class Download {
     }
   }
 
-  private int allChapters(String url) {
+  private int allChapters(String url, Spider spider) {
     return spider.search(url).size();
   }
 
-  public String getName() {
-    return name;
+  public String getMangaName() {
+    return mangaName;
   }
 }

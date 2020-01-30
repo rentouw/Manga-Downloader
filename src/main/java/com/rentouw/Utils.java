@@ -78,7 +78,7 @@ class Utils {
     int number = input.nextInt();
     ArrayList<String> newMangaList = new ArrayList<>();
     ArrayList<String> newChapterList = new ArrayList<>();
-      String[] mangaList = handler.getFile(FileHandler.getMangaList());
+    String[] mangaList = handler.getFile(FileHandler.getMangaList());
     if (number <= mangaList.length) {
       for (String manga : mangaList) {
         if (manga != null) {
@@ -88,7 +88,7 @@ class Utils {
         }
       }
 
-        String[] chapterList = handler.getFile(FileHandler.getChapterList());
+      String[] chapterList = handler.getFile(FileHandler.getChapterList());
       for (String chapter : chapterList) {
         if (chapter != null) {
           if (!chapter.equals(chapterList[number])) {
@@ -124,28 +124,28 @@ class Utils {
   }
 
   public static void show() {
-      FileHandler handler = new FileHandler();
-      System.out.println("name(chapter)[install]");
-      String[] allMangas = handler.getFile(FileHandler.getMangaList());
-      String[] allChapters = handler.getFile(FileHandler.getChapterList());
-      for (int i = 0; i < allMangas.length; i++) {
-          String manga = allMangas[i];
-          String chapter = allChapters[i];
-          if (manga != null) {
-              String[] mangaList = manga.split("([$])");
-              if (chapter != null) {
-                  String[] chapterList = chapter.split("([$])");
-                  System.out.println(
-                          "\t-"
-                                  + i
-                  + " "
-                  + mangaList[0]
-                  + " ("
-                  + chapterList[1]
-                  + ")"
-                  + "["
-                  + mangaList[2]
-                  + "]");
+    FileHandler handler = new FileHandler();
+    System.out.println("name(chapter)[install]");
+    String[] allMangas = handler.getFile(FileHandler.getMangaList());
+    String[] allChapters = handler.getFile(FileHandler.getChapterList());
+    for (int i = 0; i < allMangas.length; i++) {
+      String manga = allMangas[i];
+      String chapter = allChapters[i];
+      if (manga != null) {
+        String[] mangaList = manga.split("([$])");
+        if (chapter != null) {
+          String[] chapterList = chapter.split("([$])");
+          System.out.println(
+                  "\t-"
+                          + i
+                          + " "
+                          + mangaList[0]
+                          + " ("
+                          + chapterList[1]
+                          + ")"
+                          + "["
+                          + mangaList[2]
+                          + "]");
         } else {
           System.out.println("\t-" + i + " " + mangaList[0] + "[" + mangaList[2] + "]");
         }
@@ -154,14 +154,15 @@ class Utils {
   }
 
   public static void moveNewFiles(ArrayList<String> files) {
-    String root = FileHandler.getRootFolder();
-    if (!FileHandler.checkFile(root + "/newFiles/")) {
-      Download.makePath(root + "/newFiles/");
+    if (!FileHandler.checkFile(FileHandler.getRootFolder() + "/newFiles/")) {
+      Download.makePath(FileHandler.getRootFolder() + "/newFiles/");
     }
     for (String filePath : files) {
       File f = new File(filePath);
       try {
-        Files.copy(Paths.get(f.getAbsolutePath()), Paths.get(root + "/newFiles/" + f.getName()));
+        Files.copy(
+                Paths.get(f.getAbsolutePath()),
+                Paths.get(FileHandler.getRootFolder() + "/newFiles/" + f.getName()));
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -170,9 +171,9 @@ class Utils {
 
   public static ArrayList<String> checkNewFiles() {
     String root = FileHandler.getRootFolder();
-      FileHandler fileHandler = new FileHandler();
-      String[] mangasArray = fileHandler.getFile(FileHandler.getMangaList());
-      ArrayList<String> files = new ArrayList<>();
+    FileHandler fileHandler = new FileHandler();
+    String[] mangasArray = fileHandler.getFile(FileHandler.getMangaList());
+    ArrayList<String> files = new ArrayList<>();
     String folder;
     try {
       for (String mangaArray : mangasArray) {
