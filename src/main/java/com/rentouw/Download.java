@@ -119,7 +119,7 @@ class Download extends Thread {
         // Requesting input data from server
         inputStream = con.getInputStream();
 
-        //        System.out.println("Write to " + path);
+        System.out.println("Write to " + path);
         // Open local file writer
         outputStream = new FileOutputStream(path);
 

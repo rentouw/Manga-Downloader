@@ -3,7 +3,7 @@ package com.rentouw;
 import java.io.*;
 
 class FileHandler {
-  private static String rootFolder;
+  private static String rootFolder = "";
   private static String mangaList = "manga.list";
   private static String chapterList = "log.txt";
 
