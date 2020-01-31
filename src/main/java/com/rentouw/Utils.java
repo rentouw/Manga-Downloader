@@ -136,16 +136,16 @@ class Utils {
         if (chapter != null) {
           String[] chapterList = chapter.split("([$])");
           System.out.println(
-                  "\t-"
-                          + i
-                          + " "
-                          + mangaList[0]
-                          + " ("
-                          + chapterList[1]
-                          + ")"
-                          + "["
-                          + mangaList[2]
-                          + "]");
+              "\t-"
+                  + i
+                  + " "
+                  + mangaList[0]
+                  + " ("
+                  + chapterList[1]
+                  + ")"
+                  + "["
+                  + mangaList[2]
+                  + "]");
         } else {
           System.out.println("\t-" + i + " " + mangaList[0] + "[" + mangaList[2] + "]");
         }
@@ -161,8 +161,8 @@ class Utils {
       File f = new File(filePath);
       try {
         Files.copy(
-                Paths.get(f.getAbsolutePath()),
-                Paths.get(FileHandler.getRootFolder() + "/newFiles/" + f.getName()));
+            Paths.get(f.getAbsolutePath()),
+            Paths.get(FileHandler.getRootFolder() + "/newFiles/" + f.getName()));
       } catch (IOException e) {
         System.out.println(f.getName() + " is already in the newFiles folder.");
       }

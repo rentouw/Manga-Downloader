@@ -3,31 +3,31 @@ package com.rentouw;
 import java.io.*;
 
 class FileHandler {
-    private static String rootFolder = "./";
-    private static String mangaList = rootFolder + "manga.list";
-    private static String chapterList = rootFolder + "log.txt";
+  private static String rootFolder = "./";
+  private static String mangaList = rootFolder + "manga.list";
+  private static String chapterList = rootFolder + "log.txt";
 
-    public static void setRootFolder(String rootFolder) {
-        FileHandler.rootFolder = rootFolder;
+  public static void setRootFolder(String rootFolder) {
+    FileHandler.rootFolder = rootFolder;
+  }
+
+  public static void setMangaList(String mangaList) {
+    FileHandler.mangaList = mangaList;
+  }
+
+  public static void setChapterList(String chapterList) {
+    FileHandler.chapterList = chapterList;
+  }
+
+  public FileHandler() {
+    if (!checkFile(mangaList)) {
+      File f = new File(mangaList);
+      try {
+        f.createNewFile();
+      } catch (IOException e) {
+        System.out.println("Error=" + e.getMessage());
+      }
     }
-
-    public static void setMangaList(String mangaList) {
-        FileHandler.mangaList = mangaList;
-    }
-
-    public static void setChapterList(String chapterList) {
-        FileHandler.chapterList = chapterList;
-    }
-
-    public FileHandler() {
-        if (!checkFile(mangaList)) {
-            File f = new File(mangaList);
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                System.out.println("Error=" + e.getMessage());
-            }
-        }
     if (!checkFile(chapterList)) {
       File f = new File(chapterList);
       try {
@@ -54,22 +54,22 @@ class FileHandler {
     return new File(path).exists();
   }
 
-    /**
-     * Read the full file and return every line via a String array.
-     *
-     * @param fileLocation the location of the file we want to read.
-     * @return String array with every entry a line in the file
-     */
-    public String[] getFile(String fileLocation) {
-        // This will reference one line at a time
-        String line;
-        String[] output = new String[100];
-        try {
-            FileReader fileReader;
-            // Assume default encoding.
-            fileReader = new FileReader(fileLocation);
-            // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+  /**
+   * Read the full file and return every line via a String array.
+   *
+   * @param fileLocation the location of the file we want to read.
+   * @return String array with every entry a line in the file
+   */
+  public String[] getFile(String fileLocation) {
+    // This will reference one line at a time
+    String line;
+    String[] output = new String[100];
+    try {
+      FileReader fileReader;
+      // Assume default encoding.
+      fileReader = new FileReader(fileLocation);
+      // Always wrap FileReader in BufferedReader.
+      BufferedReader bufferedReader = new BufferedReader(fileReader);
 
       int i = 0;
       while ((line = bufferedReader.readLine()) != null) {
@@ -80,10 +80,10 @@ class FileHandler {
       // Always close files.
       bufferedReader.close();
     } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + fileLocation + "'");
+      System.out.println("Unable to open file '" + fileLocation + "'");
 
     } catch (IOException ex) {
-            System.out.println("Error reading file '" + fileLocation + "'");
+      System.out.println("Error reading file '" + fileLocation + "'");
     }
 
     return output;
@@ -97,7 +97,7 @@ class FileHandler {
   public void writeManga(String name, String url, boolean bool) {
     try {
 
-        String[] array = getFile(FileHandler.getMangaList());
+      String[] array = getFile(FileHandler.getMangaList());
 
       // Assume default encoding.
       FileWriter fileWriter = new FileWriter(mangaList);
@@ -134,7 +134,7 @@ class FileHandler {
 
   public void writeChapter(String name, int chapter) {
     try {
-        String[] array = getFile(FileHandler.getChapterList());
+      String[] array = getFile(FileHandler.getChapterList());
 
       // Assume default encoding.
       FileWriter fileWriter = new FileWriter(chapterList);
@@ -164,8 +164,8 @@ class FileHandler {
   }
 
   public int readChapter(String name) {
-      String[] logList = this.getFile(FileHandler.getChapterList());
-      int chapter = 0;
+    String[] logList = this.getFile(FileHandler.getChapterList());
+    int chapter = 0;
     try {
       for (String log : logList) {
         if (log != null) {
@@ -188,52 +188,52 @@ class FileHandler {
    * @return true if url is in the file.
    */
   public boolean checkByUrl(String url) {
-      boolean output = false;
-      String[] list = this.getFile(FileHandler.getMangaList());
-      for (String smallList : list) {
-          if (smallList != null) {
-              String[] array = smallList.split("([$])");
-              if (array[1].equals(url)) {
-                  output = true;
-              }
-          }
+    boolean output = false;
+    String[] list = this.getFile(FileHandler.getMangaList());
+    for (String smallList : list) {
+      if (smallList != null) {
+        String[] array = smallList.split("([$])");
+        if (array[1].equals(url)) {
+          output = true;
+        }
       }
-      return output;
+    }
+    return output;
   }
 
-    /**
-     * WIP
-     *
-     * @param value
-     * @param name
-     */
-    public void writeConfig(String value, String name) {
-        try {
-            String[] array = getFile(FileHandler.getRootFolder() + "manga.conf");
+  /**
+   * WIP
+   *
+   * @param value
+   * @param name
+   */
+  public void writeConfig(String value, String name) {
+    try {
+      String[] array = getFile(FileHandler.getRootFolder() + "manga.conf");
 
-            // Assume default encoding.
-            FileWriter fileWriter = new FileWriter(FileHandler.getRootFolder() + "manga.conf");
+      // Assume default encoding.
+      FileWriter fileWriter = new FileWriter(FileHandler.getRootFolder() + "manga.conf");
 
-            // Always wrap FileWriter in BufferedWriter.
-            BufferedWriter out = new BufferedWriter(fileWriter);
+      // Always wrap FileWriter in BufferedWriter.
+      BufferedWriter out = new BufferedWriter(fileWriter);
 
-            for (String line : array) {
-                if (line != null) {
-                    if (!line.split("([$])")[0].equals(name)) {
-                        out.write(line);
-                        out.newLine();
-                    }
-                }
-            }
-            String newLine = name + "$" + value;
-            out.write(newLine);
+      for (String line : array) {
+        if (line != null) {
+          if (!line.split("([$])")[0].equals(name)) {
+            out.write(line);
             out.newLine();
-
-            // Always close files.
-            out.close();
-        } catch (IOException ex) {
-            System.out.println(
-                    "Error writing to file '" + FileHandler.getRootFolder() + "manga.conf" + "'");
+          }
         }
+      }
+      String newLine = name + "$" + value;
+      out.write(newLine);
+      out.newLine();
+
+      // Always close files.
+      out.close();
+    } catch (IOException ex) {
+      System.out.println(
+          "Error writing to file '" + FileHandler.getRootFolder() + "manga.conf" + "'");
     }
+  }
 }

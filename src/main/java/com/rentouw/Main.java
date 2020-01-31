@@ -12,15 +12,15 @@ class Main {
     readConfig();
     while (true) {
       System.out.print(
-              "        MANGA DOWNLOADER\n"
-                      + "------------------------------------\n"
-                      + "\t1. Download\n"
-                      + "\t2. List\n"
-                      + "\t3. Add\n"
-                      + "\t4. Remove\n"
-                      + "\t5. Options\n"
-                      + "\t6. Exit\n"
-                      + "select :");
+          "        MANGA DOWNLOADER\n"
+              + "------------------------------------\n"
+              + "\t1. Download\n"
+              + "\t2. List\n"
+              + "\t3. Add\n"
+              + "\t4. Remove\n"
+              + "\t5. Options\n"
+              + "\t6. Exit\n"
+              + "select :");
       value = input.nextInt();
       switch (value) {
         case 1:
@@ -40,8 +40,7 @@ class Main {
           }
           executor.shutdown();
           System.out.println("Downloading output:");
-          while (!executor.isTerminated()) {
-          }
+          while (!executor.isTerminated()) {}
 
           for (String list : bigList) {
             if (list != null) {
@@ -91,16 +90,16 @@ class Main {
           break;
         case 6:
           System.out.println(
-                  "\nBye\n"
-                          + "                   _____\n"
-                          + "                  /     \\\n"
-                          + "                  vvvvvvv  /|__/|\n"
-                          + "                     I   /O,O   |\n"
-                          + "                     I /_____   |      /|/|\n"
-                          + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
-                          + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
-                          + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
-                          + "            \n\n");
+              "\nBye\n"
+                  + "                   _____\n"
+                  + "                  /     \\\n"
+                  + "                  vvvvvvv  /|__/|\n"
+                  + "                     I   /O,O   |\n"
+                  + "                     I /_____   |      /|/|\n"
+                  + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
+                  + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
+                  + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
+                  + "            \n\n");
           System.exit(0);
           break;
         default:

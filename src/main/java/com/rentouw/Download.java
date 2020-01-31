@@ -33,9 +33,7 @@ class Download extends Thread {
     }
   }
 
-  /**
-   * @param name name of the manga.
-   */
+  /** @param name name of the manga. */
   private static void DownloadManga(Spider spider, String name) {
     //    System.out.println("\tDownloading manga " + name);
     List<List<String>> imgs = spider.getImagesPerUrl();
@@ -61,14 +59,14 @@ class Download extends Thread {
         String file = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + prefix + j;
         String oldFile = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + j;
         if (!FileHandler.checkFile(
-                FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz")) {
+            FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz")) {
           if (!FileHandler.checkFile(file)
-                  && !FileHandler.checkFile(file + ".jpg")
-                  && !FileHandler.checkFile(file + ".png")) {
+              && !FileHandler.checkFile(file + ".jpg")
+              && !FileHandler.checkFile(file + ".png")) {
             try {
               if (!FileHandler.checkFile(file)
-                      && !FileHandler.checkFile(oldFile + ".jpg")
-                      && !FileHandler.checkFile(oldFile + ".png")) {
+                  && !FileHandler.checkFile(oldFile + ".jpg")
+                  && !FileHandler.checkFile(oldFile + ".png")) {
                 DownloadImage(imgurl, file);
                 Convert.checkJPG(file);
               } else {
@@ -107,7 +105,7 @@ class Download extends Thread {
 
       // This user agent is for if the server wants real humans to visit
       String USER_AGENT =
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 
       boolean notDone = true;
       while (notDone) {
@@ -120,7 +118,7 @@ class Download extends Thread {
         // Requesting input data from server
         inputStream = con.getInputStream();
 
-//        System.out.println("Write to " + path);
+        //        System.out.println("Write to " + path);
         // Open local file writer
         outputStream = new FileOutputStream(path);
 
@@ -143,12 +141,12 @@ class Download extends Thread {
 
     } catch (Exception ex) {
       System.out.println(
-              "Error downloading img on url "
-                      + urlImg
-                      + " to path "
-                      + path
-                      + "\nError = "
-                      + ex.getMessage());
+          "Error downloading img on url "
+              + urlImg
+              + " to path "
+              + path
+              + "\nError = "
+              + ex.getMessage());
     }
 
     // closing used resources

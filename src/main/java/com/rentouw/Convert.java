@@ -56,7 +56,8 @@ class Convert {
                         + ".cbz"));
 
       } else {
-//        System.out.println(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga + "_" + map_prefix + i + ".cbz exists");
+        //        System.out.println(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga +
+        // "_" + map_prefix + i + ".cbz exists");
       }
     }
     File f = new File(FileHandler.getRootFolder() + nameManga);
