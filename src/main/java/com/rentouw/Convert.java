@@ -18,13 +18,13 @@ class Convert {
 
       if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")) {
         System.out.println(
-                "Making "
-                        + FileHandler.getRootFolder()
-                        + nameManga
-                        + "_cbz/"
-                        + map_prefix
-                        + i
-                        + ".cbz");
+            "Making "
+                + FileHandler.getRootFolder()
+                + nameManga
+                + "_cbz/"
+                + map_prefix
+                + i
+                + ".cbz");
         try {
           zipFolder(
               Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i),
