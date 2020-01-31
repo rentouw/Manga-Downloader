@@ -2,6 +2,8 @@ package com.rentouw;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class Main {
   public static void main(String[] args) {
@@ -28,48 +30,44 @@ class Main {
           String[] oldChapterList = handler.getFile(FileHandler.getChapterList());
           Download download = new Download("test", "init");
           int i = 1;
+          ExecutorService executor = Executors.newFixedThreadPool(bigList.length);
           for (String list : bigList) {
             if (list != null) {
               download = new Download(list, Integer.toString(i));
-              download.start();
+              executor.execute(download);
+              i += 1;
+            }
+          }
+          executor.shutdown();
+          System.out.println("Downloading output:");
+          while (!executor.isTerminated()) {
+          }
+
+          for (String list : bigList) {
+            if (list != null) {
               try {
                 if (Boolean.parseBoolean(list.split("([$])")[2])) {
-                  Convert.convert(download.getMangaName());
+                  String[] listSplit = list.split("([$])");
+                  Convert.convert(listSplit[0]);
                 }
               } catch (Exception e) {
                 System.out.println("error converter=" + e.getMessage());
               }
-              i += 1;
             }
-          }
-
-          while (Thread.activeCount() > 1) {
           }
 
           String[] newChapterList = handler.getFile(FileHandler.getChapterList());
           Utils.show();
           System.out.println("\n");
-          for (i = 0; i < newChapterList.length; i++) {
-            String oldchapter = oldChapterList[i];
-            String newchapter = newChapterList[i];
-            if (oldchapter != null) {
-              String[] chapterOld = oldchapter.split("([$])");
-              String[] chapterNew = newchapter.split("([$])");
-              if (Integer.parseInt(chapterOld[1]) < Integer.parseInt(chapterNew[1])) {
-                System.out.println("\tNew chapter of " + chapterNew[0]);
-              }
-            } else if (newchapter != null) {
-              String[] chapterNew = newchapter.split("([$])");
-              System.out.println("\tNew chapter of " + chapterNew[0]);
-            }
-          }
           ArrayList<String> files = Utils.checkNewFiles();
           Utils.moveNewFiles(files);
-          System.out.println("These files new:");
-          for (String out : files) {
-            System.out.println("\t" + out);
+          if (files.size() != 0) {
+            System.out.println("These files new:");
+            for (String out : files) {
+              System.out.println("\t" + out);
+            }
+            System.out.println("Also available in the newFiles folder.");
           }
-          System.out.println("Also available in the newFiles folder.");
           Utils.enter();
           break;
         case 2:

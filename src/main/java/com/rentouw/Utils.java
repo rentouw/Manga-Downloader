@@ -164,7 +164,7 @@ class Utils {
                 Paths.get(f.getAbsolutePath()),
                 Paths.get(FileHandler.getRootFolder() + "/newFiles/" + f.getName()));
       } catch (IOException e) {
-        e.printStackTrace();
+        System.out.println(f.getName() + " is already in the newFiles folder.");
       }
     }
   }

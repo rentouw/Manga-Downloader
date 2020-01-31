@@ -15,7 +15,7 @@ class Download extends Thread {
   Download(String urlList, String name) {
     threadName = "downloader-" + name;
     this.urlList = urlList;
-    System.out.println("Creating " + threadName);
+    //    System.out.println("Creating " + threadName);
   }
 
   public static void makePath(String path) {
@@ -37,7 +37,7 @@ class Download extends Thread {
    * @param name name of the manga.
    */
   private static void DownloadManga(Spider spider, String name) {
-    System.out.println("\tDownloading manga " + name);
+    //    System.out.println("\tDownloading manga " + name);
     List<List<String>> imgs = spider.getImagesPerUrl();
     int i = 0;
     String imgurl;
@@ -77,47 +77,17 @@ class Download extends Thread {
                 //                System.out.println("Converted file: " + oldFile);
               }
             } catch (Exception ex) {
-              System.out.println("Could not download.");
+              System.out.println("Could not download " + file + " on url " + imgurl);
               ex.getCause();
             }
           } else {
             //                            Convert.checkJPG(file);
-            System.out.println("file=" + file + " exists.");
+            //            System.out.println("file=" + file + " exists.");
           }
         }
       }
       i++;
       Utils.recursiveDelete(new File(FileHandler.getRootFolder() + name));
-    }
-  }
-
-  public void run() {
-    System.out.println("Running " + threadName);
-    FileHandler handler = new FileHandler();
-    Spider spider = new Spider();
-    if (urlList != null) {
-      String[] array = urlList.split("([$])");
-      mangaName = array[0];
-      String url = array[1];
-      boolean downloadBool = Boolean.parseBoolean(array[2]);
-      int oldChapter = handler.readChapter(mangaName);
-      int newChapter = this.allChapters(url, spider);
-      if (oldChapter != newChapter) {
-        handler.writeChapter(mangaName, newChapter);
-      }
-      if (downloadBool) {
-        DownloadManga(spider, mangaName);
-      }
-      System.out.println("\tDone downloading");
-    }
-    System.out.println("Thread " + threadName + " exiting.");
-  }
-
-  public void start() {
-    System.out.println("Starting " + threadName);
-    if (t == null) {
-      t = new Thread(this, threadName);
-      t.start();
     }
   }
 
@@ -137,7 +107,7 @@ class Download extends Thread {
 
       // This user agent is for if the server wants real humans to visit
       String USER_AGENT =
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 
       boolean notDone = true;
       while (notDone) {
@@ -150,7 +120,7 @@ class Download extends Thread {
         // Requesting input data from server
         inputStream = con.getInputStream();
 
-        System.out.println("Write to " + path);
+//        System.out.println("Write to " + path);
         // Open local file writer
         outputStream = new FileOutputStream(path);
 
@@ -173,12 +143,12 @@ class Download extends Thread {
 
     } catch (Exception ex) {
       System.out.println(
-          "Error downloading img on url "
-              + urlImg
-              + " to path "
-              + path
-              + "\nError = "
-              + ex.getMessage());
+              "Error downloading img on url "
+                      + urlImg
+                      + " to path "
+                      + path
+                      + "\nError = "
+                      + ex.getMessage());
     }
 
     // closing used resources
@@ -190,6 +160,36 @@ class Download extends Thread {
       Objects.requireNonNull(inputStream).close();
     } catch (IOException e) {
       System.out.println("Error=" + e.getMessage());
+    }
+  }
+
+  public void run() {
+    //    System.out.println("Running " + threadName);
+    FileHandler handler = new FileHandler();
+    Spider spider = new Spider();
+    if (urlList != null) {
+      String[] array = urlList.split("([$])");
+      mangaName = array[0];
+      String url = array[1];
+      boolean downloadBool = Boolean.parseBoolean(array[2]);
+      int oldChapter = handler.readChapter(mangaName);
+      int newChapter = this.allChapters(url, spider);
+      if (oldChapter != newChapter) {
+        handler.writeChapter(mangaName, newChapter);
+      }
+      if (downloadBool) {
+        DownloadManga(spider, mangaName);
+      }
+      System.out.println("\tDone downloading " + mangaName);
+    }
+    //    System.out.println("Thread " + threadName + " exiting.");
+  }
+
+  public void start() {
+    //    System.out.println("Starting " + threadName);
+    if (t == null) {
+      t = new Thread(this, threadName);
+      t.start();
     }
   }
 
