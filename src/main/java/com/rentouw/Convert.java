@@ -10,54 +10,33 @@ class Convert {
   public static void convert(String nameManga) {
     FileHandler handler = new FileHandler();
     String map_prefix = "00";
-    Download.makePath(FileHandler.getRootFolder() + nameManga + "_cbz/");
+    String cbzFolder = FileHandler.getRootFolder() + nameManga + "_cbz/";
+    Download.makePath(cbzFolder);
     for (int i = 0; i < handler.readChapter(nameManga); i++) {
       if (i >= 10 && i < 100) {
         map_prefix = "0";
       } else if (i >= 100) {
         map_prefix = "";
       }
-      if (!FileHandler.checkFile(
-          FileHandler.getRootFolder()
-              + nameManga
-              + "_cbz/"
-              + nameManga
-              + "_"
-              + map_prefix
-              + i
-              + ".cbz")) {
+      if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")) {
         System.out.println(
-            "Making "
-                + FileHandler.getRootFolder()
-                + nameManga
-                + "_cbz/"
-                + map_prefix
-                + i
-                + ".cbz");
+                "Making "
+                        + FileHandler.getRootFolder()
+                        + nameManga
+                        + "_cbz/"
+                        + map_prefix
+                        + i
+                        + ".cbz");
         try {
           zipFolder(
-              Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i),
-              Paths.get(
-                  FileHandler.getRootFolder() + nameManga + "_cbz/" + map_prefix + i + ".cbz"));
+                  Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i),
+                  Paths.get(cbzFolder + map_prefix + i + ".cbz"));
         } catch (Exception e) {
           e.printStackTrace();
         }
 
-        new File(FileHandler.getRootFolder() + nameManga + "_cbz/" + map_prefix + i + ".cbz")
-            .renameTo(
-                new File(
-                    FileHandler.getRootFolder()
-                        + nameManga
-                        + "_cbz/"
-                        + nameManga
-                        + "_"
-                        + map_prefix
-                        + i
-                        + ".cbz"));
-
-      } else {
-        //        System.out.println(FileHandler.getRootFolder() + nameManga + "_cbz/" + nameManga +
-        // "_" + map_prefix + i + ".cbz exists");
+        new File(cbzFolder + map_prefix + i + ".cbz")
+                .renameTo(new File(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz"));
       }
     }
     File f = new File(FileHandler.getRootFolder() + nameManga);
@@ -88,21 +67,18 @@ class Convert {
    */
   public static void checkJPG(String file) {
     File f;
-    if (FileHandler.checkFile(file + ".jpg")) {
-      f = new File(file + ".jpg");
-    } else if (FileHandler.checkFile(file + ".png")) {
-      f = new File(file + ".png");
-    } else {
-      f = new File(file);
-    }
+    String jpgFile = file + ".jpg";
+    String pngFile = file + ".png";
+    if (FileHandler.checkFile(jpgFile)) f = new File(jpgFile);
+    else if (FileHandler.checkFile(pngFile)) f = new File(pngFile);
+    else f = new File(file);
     try {
       Process p = Runtime.getRuntime().exec("file " + f.getAbsolutePath());
       String output = new BufferedReader(new InputStreamReader(p.getInputStream())).readLine();
-      if (output.contains("PNG")) {
-        f.renameTo(new File(f.getPath().replace(".jpg", "") + ".png"));
-      } else if (output.contains("JPEG")) {
+      if (output.contains("PNG")) f.renameTo(new File(f.getPath().replace(".jpg", "") + ".png"));
+      else if (output.contains("JPEG"))
         f.renameTo(new File(f.getPath().replace(".jpg", "") + ".jpg"));
-      }
+
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -10,17 +10,16 @@ public class Options {
     while (loop) {
       System.out.print(
           "        OPTIONS\n"
-              + "------------------------------------\n"
-              + "\t1. Change Location WIP\n"
-              + "\t2. Exit\n"
-              + "select :");
+                  + "------------------------------------\n"
+                  + "\t1. Change Location\n"
+                  + "\t2. Exit\n"
+                  + "select :");
       value = input.nextInt();
       switch (value) {
         case 1:
           changeLocationAsk();
-          // TODO: make sure that the config file is changed with the new location
-          //          FileHandler handler = new FileHandler();
-          //          handler.writeConfig(FileHandler.getRootFolder(), "location");
+          Config properties = new Config();
+          properties.writeConfig(FileHandler.getRootFolder(), "rootLocation");
           break;
         case 2:
           loop = false;
@@ -43,10 +42,8 @@ public class Options {
   }
 
   protected static void changeLocation(String location) {
-    if (!location.equals("ERROR")) {
-      if (!location.substring(location.length() - 1).equals("/")) {
-        location = location + "/";
-      }
+    if (location != null) {
+      if (!location.substring(location.length() - 1).equals("/")) location = location + "/";
       FileHandler.setRootFolder(location);
       FileHandler.setMangaList(location + "manga.list");
       FileHandler.setChapterList(location + "log.txt");

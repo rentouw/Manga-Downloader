@@ -24,49 +24,7 @@ class Main {
       value = input.nextInt();
       switch (value) {
         case 1:
-          System.out.println("        DOWNLOAD\n" + "------------------------------------");
-          FileHandler handler = new FileHandler();
-          String[] bigList = handler.getFile(FileHandler.getMangaList());
-          String[] oldChapterList = handler.getFile(FileHandler.getChapterList());
-          Download download = new Download("test", "init");
-          int i = 1;
-          ExecutorService executor = Executors.newFixedThreadPool(bigList.length);
-          for (String list : bigList) {
-            if (list != null) {
-              download = new Download(list, Integer.toString(i));
-              executor.execute(download);
-              i += 1;
-            }
-          }
-          executor.shutdown();
-          System.out.println("Downloading output:");
-          while (!executor.isTerminated()) {}
-
-          for (String list : bigList) {
-            if (list != null) {
-              try {
-                if (Boolean.parseBoolean(list.split("([$])")[2])) {
-                  String[] listSplit = list.split("([$])");
-                  Convert.convert(listSplit[0]);
-                }
-              } catch (Exception e) {
-                System.out.println("error converter=" + e.getMessage());
-              }
-            }
-          }
-
-          String[] newChapterList = handler.getFile(FileHandler.getChapterList());
-          Utils.show();
-          System.out.println("\n");
-          ArrayList<String> files = Utils.checkNewFiles();
-          Utils.moveNewFiles(files);
-          if (files.size() != 0) {
-            System.out.println("These files new:");
-            for (String out : files) {
-              System.out.println("\t" + out);
-            }
-            System.out.println("Also available in the newFiles folder.");
-          }
+          download();
           Utils.enter();
           break;
         case 2:
@@ -85,7 +43,6 @@ class Main {
           Utils.enter();
           break;
         case 5:
-          // WIP
           Options.show();
           break;
         case 6:
@@ -97,33 +54,62 @@ class Main {
                   + "                     I   /O,O   |\n"
                   + "                     I /_____   |      /|/|\n"
                   + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
-                  + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
-                  + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
-                  + "            \n\n");
+                      + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
+                      + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
+                      + "            \n\n");
           System.exit(0);
-          break;
         default:
           System.out.println("Pls select 1-5.");
       }
     }
   }
 
-  private static void readConfig() {
-    String mangaLocation = FileHandler.getRootFolder() + "manga.conf";
-    FileHandler handler = new FileHandler();
-    if (FileHandler.checkFile(mangaLocation)) {
-      String[] config = handler.getFile(mangaLocation);
-      String location = "ERROR";
-      for (String data : config) {
-        if (data != null) {
-          if (data.split("([$])")[0].equals("location")) {
-            location = data.split("([$])")[1];
-          }
+  private static void newFiles() {
+    Utils.show();
+    System.out.println("\n");
+    ArrayList<String> files = Utils.checkNewFiles();
+    Utils.moveNewFiles(files);
+    if (files.size() != 0) {
+      System.out.println("These files new:");
+      for (String out : files) {
+        System.out.println("\t" + out);
+      }
+      System.out.println("Also available in the newFiles folder.");
+    }
+  }
+
+  private static void download() {
+    System.out.println("        DOWNLOAD\n" + "------------------------------------");
+    String[] bigList = FileHandler.getFile(FileHandler.getMangaList());
+    Download download;
+    int i = 1;
+    ExecutorService executor = Executors.newFixedThreadPool(bigList.length);
+    for (String list : bigList) {
+      if (list != null) {
+        download = new Download(list, Integer.toString(i));
+        executor.execute(download);
+        i += 1;
+      }
+    }
+    executor.shutdown();
+    System.out.println("Downloading output:");
+    while (!executor.isTerminated()) {
+    }
+
+    for (String list : bigList) {
+      if (list != null) {
+        if (Boolean.parseBoolean(list.split("([$])")[2])) {
+          String[] listSplit = list.split("([$])");
+          Convert.convert(listSplit[0]);
         }
       }
-      Options.changeLocation(location);
-    } else {
-      handler.writeConfig(FileHandler.getRootFolder(), "location");
     }
+    newFiles();
+  }
+
+  private static void readConfig() {
+    Config properties = new Config();
+    String location = properties.getPropValues();
+    Options.changeLocation(location);
   }
 }

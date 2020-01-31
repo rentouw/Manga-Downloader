@@ -7,15 +7,13 @@ import java.util.List;
 import java.util.Objects;
 
 class Download extends Thread {
-  private String mangaName;
+  private final String threadName;
+  private final String urlList;
   private Thread t;
-  private String threadName;
-  private String urlList;
 
   Download(String urlList, String name) {
     threadName = "downloader-" + name;
     this.urlList = urlList;
-    //    System.out.println("Creating " + threadName);
   }
 
   public static void makePath(String path) {
@@ -41,32 +39,23 @@ class Download extends Thread {
     String imgurl;
     String map_prefix = "00";
     for (List<String> imgLinks : imgs) {
-      if (i >= 10 && i < 100) {
-        map_prefix = "0";
-      } else if (i >= 100) {
-        map_prefix = "";
-      }
+      if (i >= 10 && i < 100) map_prefix = "0";
+      else if (i >= 100) map_prefix = "";
       makePath(FileHandler.getRootFolder() + name + "/" + map_prefix + i);
       String prefix = "00";
       for (int j = 0; j < imgLinks.size(); j++) {
-        if (j >= 10 && j < 100) {
-          prefix = "0";
-        } else if (j >= 100) {
-          prefix = "";
-        }
+        if (j >= 10 && j < 100) prefix = "0";
+        else if (j >= 100) prefix = "";
         imgurl = imgLinks.get(j);
         // added root folder to check
         String file = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + prefix + j;
         String oldFile = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + j;
-        if (!FileHandler.checkFile(
-            FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz")) {
-          if (!FileHandler.checkFile(file)
-              && !FileHandler.checkFile(file + ".jpg")
-              && !FileHandler.checkFile(file + ".png")) {
+        String cbzFolder =
+                FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz";
+        if (!FileHandler.checkFile(cbzFolder)) {
+          if (fileCheckFull(file)) {
             try {
-              if (!FileHandler.checkFile(file)
-                  && !FileHandler.checkFile(oldFile + ".jpg")
-                  && !FileHandler.checkFile(oldFile + ".png")) {
+              if (fileCheckFull(file, oldFile)) {
                 DownloadImage(imgurl, file);
                 Convert.checkJPG(file);
               } else {
@@ -78,15 +67,27 @@ class Download extends Thread {
               System.out.println("Could not download " + file + " on url " + imgurl);
               ex.getCause();
             }
-          } else {
-            //                            Convert.checkJPG(file);
-            //            System.out.println("file=" + file + " exists.");
           }
         }
       }
       i++;
       Utils.recursiveDelete(new File(FileHandler.getRootFolder() + name));
     }
+  }
+
+  private static boolean fileCheckFull(String file) {
+    return fileCheckFull(file, "null");
+  }
+
+  private static boolean fileCheckFull(String file, String oldFile) {
+    if (oldFile != null)
+      return !FileHandler.checkFile(file)
+              && !FileHandler.checkFile(oldFile + ".jpg")
+              && !FileHandler.checkFile(oldFile + ".png");
+    else
+      return !FileHandler.checkFile(file)
+              && !FileHandler.checkFile(file + ".jpg")
+              && !FileHandler.checkFile(file + ".png");
   }
 
   private static void DownloadImage(String urlImg, String path) {
@@ -167,7 +168,7 @@ class Download extends Thread {
     Spider spider = new Spider();
     if (urlList != null) {
       String[] array = urlList.split("([$])");
-      mangaName = array[0];
+      String mangaName = array[0];
       String url = array[1];
       boolean downloadBool = Boolean.parseBoolean(array[2]);
       int oldChapter = handler.readChapter(mangaName);
@@ -193,9 +194,5 @@ class Download extends Thread {
 
   private int allChapters(String url, Spider spider) {
     return spider.search(url).size();
-  }
-
-  public String getMangaName() {
-    return mangaName;
   }
 }
