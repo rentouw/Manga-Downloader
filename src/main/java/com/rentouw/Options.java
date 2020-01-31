@@ -10,10 +10,10 @@ public class Options {
     while (loop) {
       System.out.print(
           "        OPTIONS\n"
-                  + "------------------------------------\n"
-                  + "\t1. Change Location\n"
-                  + "\t2. Exit\n"
-                  + "select :");
+              + "------------------------------------\n"
+              + "\t1. Change Location\n"
+              + "\t2. Exit\n"
+              + "select :");
       value = input.nextInt();
       switch (value) {
         case 1:

@@ -135,8 +135,8 @@ class Utils {
         if (chapter != null) {
           String[] chapterList = chapter.split("([$])");
           System.out.println(
-                  "\t-"
-                          + i
+              "\t-"
+                  + i
                   + " "
                   + mangaList[0]
                   + " ("

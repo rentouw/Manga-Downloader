@@ -54,9 +54,9 @@ class Main {
                   + "                     I   /O,O   |\n"
                   + "                     I /_____   |      /|/|\n"
                   + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
-                      + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
-                      + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
-                      + "            \n\n");
+                  + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
+                  + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
+                  + "            \n\n");
           System.exit(0);
         default:
           System.out.println("Pls select 1-5.");
@@ -93,8 +93,7 @@ class Main {
     }
     executor.shutdown();
     System.out.println("Downloading output:");
-    while (!executor.isTerminated()) {
-    }
+    while (!executor.isTerminated()) {}
 
     for (String list : bigList) {
       if (list != null) {

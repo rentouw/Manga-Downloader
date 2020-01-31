@@ -20,23 +20,23 @@ class Convert {
       }
       if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")) {
         System.out.println(
-                "Making "
-                        + FileHandler.getRootFolder()
-                        + nameManga
-                        + "_cbz/"
-                        + map_prefix
-                        + i
-                        + ".cbz");
+            "Making "
+                + FileHandler.getRootFolder()
+                + nameManga
+                + "_cbz/"
+                + map_prefix
+                + i
+                + ".cbz");
         try {
           zipFolder(
-                  Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i),
-                  Paths.get(cbzFolder + map_prefix + i + ".cbz"));
+              Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i),
+              Paths.get(cbzFolder + map_prefix + i + ".cbz"));
         } catch (Exception e) {
           e.printStackTrace();
         }
 
         new File(cbzFolder + map_prefix + i + ".cbz")
-                .renameTo(new File(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz"));
+            .renameTo(new File(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz"));
       }
     }
     File f = new File(FileHandler.getRootFolder() + nameManga);

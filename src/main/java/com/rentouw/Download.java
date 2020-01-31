@@ -51,7 +51,7 @@ class Download extends Thread {
         String file = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + prefix + j;
         String oldFile = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + j;
         String cbzFolder =
-                FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz";
+            FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz";
         if (!FileHandler.checkFile(cbzFolder)) {
           if (fileCheckFull(file)) {
             try {
@@ -82,12 +82,12 @@ class Download extends Thread {
   private static boolean fileCheckFull(String file, String oldFile) {
     if (oldFile != null)
       return !FileHandler.checkFile(file)
-              && !FileHandler.checkFile(oldFile + ".jpg")
-              && !FileHandler.checkFile(oldFile + ".png");
+          && !FileHandler.checkFile(oldFile + ".jpg")
+          && !FileHandler.checkFile(oldFile + ".png");
     else
       return !FileHandler.checkFile(file)
-              && !FileHandler.checkFile(file + ".jpg")
-              && !FileHandler.checkFile(file + ".png");
+          && !FileHandler.checkFile(file + ".jpg")
+          && !FileHandler.checkFile(file + ".png");
   }
 
   private static void DownloadImage(String urlImg, String path) {
