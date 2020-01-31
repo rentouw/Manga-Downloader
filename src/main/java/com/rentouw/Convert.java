@@ -13,20 +13,18 @@ class Convert {
     String cbzFolder = FileHandler.getRootFolder() + nameManga + "_cbz/";
     Download.makePath(cbzFolder);
     for (int i = 0; i < handler.readChapter(nameManga); i++) {
-      if (i >= 10 && i < 100) {
-        map_prefix = "0";
-      } else if (i >= 100) {
-        map_prefix = "";
-      }
+      if (i >= 10 && i < 100) map_prefix = "0";
+      else if (i >= 100) map_prefix = "";
+
       if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")) {
         System.out.println(
-            "Making "
-                + FileHandler.getRootFolder()
-                + nameManga
-                + "_cbz/"
-                + map_prefix
-                + i
-                + ".cbz");
+                "Making "
+                        + FileHandler.getRootFolder()
+                        + nameManga
+                        + "_cbz/"
+                        + map_prefix
+                        + i
+                        + ".cbz");
         try {
           zipFolder(
               Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i),

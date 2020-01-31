@@ -95,14 +95,6 @@ class Main {
     System.out.println("Downloading output:");
     while (!executor.isTerminated()) {}
 
-    for (String list : bigList) {
-      if (list != null) {
-        if (Boolean.parseBoolean(list.split("([$])")[2])) {
-          String[] listSplit = list.split("([$])");
-          Convert.convert(listSplit[0]);
-        }
-      }
-    }
     newFiles();
   }
 

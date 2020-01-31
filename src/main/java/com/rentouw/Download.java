@@ -33,7 +33,6 @@ class Download extends Thread {
 
   /** @param name name of the manga. */
   private static void DownloadManga(Spider spider, String name) {
-    //    System.out.println("\tDownloading manga " + name);
     List<List<String>> imgs = spider.getImagesPerUrl();
     int i = 0;
     String imgurl;
@@ -71,8 +70,9 @@ class Download extends Thread {
         }
       }
       i++;
-      Utils.recursiveDelete(new File(FileHandler.getRootFolder() + name));
     }
+    Convert.convert(name);
+    Utils.recursiveDelete(new File(FileHandler.getRootFolder() + name));
   }
 
   private static boolean fileCheckFull(String file) {
