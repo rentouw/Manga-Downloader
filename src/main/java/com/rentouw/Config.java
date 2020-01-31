@@ -6,7 +6,7 @@ import java.util.Properties;
 public class Config {
   public String getPropValues() {
     File configFile = new File("config.properties");
-    String rootLocation = "ERROR";
+    String rootLocation = null;
     try {
       FileReader reader = new FileReader(configFile);
       Properties props = new Properties();
