@@ -26,6 +26,10 @@ class FileHandler {
     }
   }
 
+  public static void makePath(String path) {
+    new File(path).mkdirs();
+  }
+
   public static String getRootFolder() {
     return rootFolder;
   }

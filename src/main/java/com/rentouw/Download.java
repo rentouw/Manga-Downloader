@@ -16,10 +16,6 @@ class Download extends Thread {
     this.urlList = urlList;
   }
 
-  public static void makePath(String path) {
-    new File(path).mkdirs();
-  }
-
   public static boolean testUrl(String url) {
     try {
       Spider spider = new Spider();
@@ -40,7 +36,7 @@ class Download extends Thread {
     for (List<String> imgLinks : imgs) {
       if (i >= 10 && i < 100) map_prefix = "0";
       else if (i >= 100) map_prefix = "";
-      makePath(FileHandler.getRootFolder() + name + "/" + map_prefix + i);
+      FileHandler.makePath(FileHandler.getRootFolder() + name + "/" + map_prefix + i);
       String prefix = "00";
       for (int j = 0; j < imgLinks.size(); j++) {
         if (j >= 10 && j < 100) prefix = "0";
@@ -181,7 +177,6 @@ class Download extends Thread {
       }
       System.out.println("\tDone downloading " + mangaName);
     }
-    //    System.out.println("Thread " + threadName + " exiting.");
   }
 
   public void start() {

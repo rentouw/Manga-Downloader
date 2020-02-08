@@ -46,7 +46,6 @@ public class Options {
       if (!location.substring(location.length() - 1).equals("/")) location = location + "/";
       FileHandler.setRootFolder(location);
       FileHandler.setMangaList(location + "manga.list");
-      FileHandler.setChapterList(location + "log.txt");
     }
   }
 }

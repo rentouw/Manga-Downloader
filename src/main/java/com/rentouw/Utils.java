@@ -153,15 +153,15 @@ class Utils {
   }
 
   public static void moveNewFiles(ArrayList<String> files) {
-    if (!FileHandler.checkFile(FileHandler.getRootFolder() + "/newFiles/")) {
-      Download.makePath(FileHandler.getRootFolder() + "/newFiles/");
+    if (!FileHandler.checkFile(FileHandler.getRootFolder() + "newFiles/")) {
+      FileHandler.makePath(FileHandler.getRootFolder() + "newFiles/");
     }
     for (String filePath : files) {
       File f = new File(filePath);
       try {
         Files.copy(
-            Paths.get(f.getAbsolutePath()),
-            Paths.get(FileHandler.getRootFolder() + "/newFiles/" + f.getName()));
+                Paths.get(f.getAbsolutePath()),
+                Paths.get(FileHandler.getRootFolder() + "newFiles/" + f.getName()));
       } catch (IOException e) {
         System.out.println(f.getName() + " is already in the newFiles folder.");
       }

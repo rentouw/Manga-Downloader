@@ -25,6 +25,7 @@ class Main {
       switch (value) {
         case 1:
           download();
+          newFiles();
           Utils.enter();
           break;
         case 2:
@@ -94,8 +95,6 @@ class Main {
     executor.shutdown();
     System.out.println("Downloading output:");
     while (!executor.isTerminated()) {}
-
-    newFiles();
   }
 
   private static void readConfig() {

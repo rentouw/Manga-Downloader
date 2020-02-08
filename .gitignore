@@ -73,5 +73,5 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 log.txt
-manga.list
+manga.json
 manga.conf

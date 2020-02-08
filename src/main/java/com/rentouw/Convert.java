@@ -11,7 +11,7 @@ class Convert {
     FileHandler handler = new FileHandler();
     String map_prefix = "00";
     String cbzFolder = FileHandler.getRootFolder() + nameManga + "_cbz/";
-    Download.makePath(cbzFolder);
+    FileHandler.makePath(cbzFolder);
     for (int i = 0; i < handler.readChapter(nameManga); i++) {
       if (i >= 10 && i < 100) map_prefix = "0";
       else if (i >= 100) map_prefix = "";
