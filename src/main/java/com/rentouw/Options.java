@@ -45,7 +45,7 @@ public class Options {
     if (location != null) {
       if (!location.substring(location.length() - 1).equals("/")) location = location + "/";
       FileHandler.setRootFolder(location);
-      FileHandler.setMangaList(location + "manga.list");
+      FileHandler.setMangaList(location + "manga.json");
     }
   }
 }

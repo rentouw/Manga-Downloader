@@ -40,7 +40,6 @@ class Utils {
 
   public static void add() {
     Scanner input = new Scanner(System.in);
-    FileHandler handler = new FileHandler();
     System.out.print("\turl of the new manga :");
     String url = input.nextLine();
     if (!FileHandler.checkByUrl(url)) {
@@ -100,9 +99,8 @@ class Utils {
   }
 
   public static void moveNewFiles(ArrayList<String> files) {
-    if (!FileHandler.checkFile(FileHandler.getRootFolder() + "newFiles/")) {
+    if (!FileHandler.checkFile(FileHandler.getRootFolder() + "newFiles/"))
       FileHandler.makePath(FileHandler.getRootFolder() + "newFiles/");
-    }
     for (String filePath : files) {
       File f = new File(filePath);
       try {
@@ -138,7 +136,6 @@ class Utils {
           }
         }
       }
-    } catch (NullPointerException ignored) {
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
