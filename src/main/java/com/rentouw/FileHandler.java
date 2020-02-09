@@ -1,23 +1,23 @@
 package com.rentouw;
 
-import java.io.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 class FileHandler {
   private static String rootFolder = "";
-  private static String mangaList = "manga.list";
-  private static String chapterList = "log.txt";
+  private static String mangaList = "manga.json";
 
   public FileHandler() {
     if (!checkFile(mangaList)) {
       File f = new File(mangaList);
-      try {
-        f.createNewFile();
-      } catch (IOException e) {
-        System.out.println("Error=" + e.getMessage());
-      }
-    }
-    if (!checkFile(chapterList)) {
-      File f = new File(chapterList);
       try {
         f.createNewFile();
       } catch (IOException e) {
@@ -46,143 +46,136 @@ class FileHandler {
     FileHandler.mangaList = mangaList;
   }
 
-  public static String getChapterList() {
-    return chapterList;
-  }
-
-  public static void setChapterList(String chapterList) {
-    FileHandler.chapterList = chapterList;
-  }
-
   public static boolean checkFile(String path) {
     return new File(path).exists();
   }
 
   /**
-   * Read the full file and return every line via a String array.
+   * Read json file. And return content as JSONArray
    *
-   * @param fileLocation the location of the file we want to read.
-   * @return String array with every entry a line in the file
+   * @return JSONArray with full content of manga.json
    */
-  public static String[] getFile(String fileLocation) {
-    // This will reference one line at a time
-    String line;
-    String[] output = new String[100];
-    try {
-      FileReader fileReader;
-      // Assume default encoding.
-      fileReader = new FileReader(fileLocation);
-      // Always wrap FileReader in BufferedReader.
-      BufferedReader bufferedReader = new BufferedReader(fileReader);
+  private static JSONArray readJsonFile(String file) {
+    // JSON parser object to parse read file
+    JSONParser jsonParser = new JSONParser();
+    JSONArray mangaListJson = new JSONArray();
 
-      int i = 0;
-      while ((line = bufferedReader.readLine()) != null) {
-        output[i] = line;
-        i++;
-      }
-
-      // Always close files.
-      bufferedReader.close();
-    } catch (FileNotFoundException ex) {
-      System.out.println("Unable to open file '" + fileLocation + "'");
-
-    } catch (IOException ex) {
-      System.out.println("Error reading file '" + fileLocation + "'");
+    try (FileReader reader = new FileReader(file)) {
+      // Read JSON file
+      mangaListJson = (JSONArray) jsonParser.parse(reader);
+    } catch (IOException | ParseException e) {
+      e.printStackTrace();
     }
-
-    return output;
+    return mangaListJson;
   }
 
-  public void writeManga(String manga) {
-    String[] listManga = manga.split("([$])");
-    writeManga(listManga[0], listManga[1], Boolean.parseBoolean(listManga[2]));
-  }
+  /**
+   * Take the JSONArray and take all input manga and return as array.
+   *
+   * @param mangaList JSONArray with all the files.
+   * @return Nested array with every manga and info about the manga organized as [manga, url,
+   * download, chapter]
+   */
+  private static ArrayList<String[]> parseMangaObject(JSONArray mangaList) {
+    // Get json keys within list
+    ArrayList<String[]> array = new ArrayList<>();
+    Object[] keyset = ((JSONObject) mangaList.get(0)).keySet().toArray();
 
-  public void writeManga(String name, String url, boolean bool) {
-    try {
-
-      String[] array = getFile(FileHandler.getMangaList());
-
-      // Assume default encoding.
-      FileWriter fileWriter = new FileWriter(mangaList);
-
-      // Always wrap FileWriter in BufferedWriter.
-      BufferedWriter out = new BufferedWriter(fileWriter);
-
-      // Note that write() does not automatically
-      // append a newline character.
-      for (String line : array) {
-        if (line != null) {
-          out.write(line);
-          out.newLine();
-        }
-      }
-      out.append(name);
-      out.append("$");
-      out.append(url);
-      out.append("$");
-      out.append(String.valueOf(bool));
-      out.newLine();
-
-      // Always close files.
-      out.close();
-    } catch (IOException ex) {
-      System.out.println("Error writing to file '" + mangaList + "'");
+    for (Object key : keyset) {
+      JSONObject mangaObject = (JSONObject) ((JSONObject) mangaList.get(0)).get(key);
+      // Make temp array
+      String[] tmp =
+              new String[]{
+                      String.valueOf(key),
+                      (String) mangaObject.get("url"),
+                      (String) mangaObject.get("download"),
+                      (String) mangaObject.get("chapter")
+              };
+      array.add(tmp);
     }
+    return array;
   }
 
-  public void writeChapter(String chapter) {
-    String[] list = chapter.split("([$])");
-    writeChapter(list[0], Integer.parseInt(list[1]));
+  /**
+   * Return content of json-file.
+   *
+   * @param file name of json-file.
+   * @return array with content of the json-file.
+   */
+  public static ArrayList<String[]> getFile(String file) {
+    return parseMangaObject(readJsonFile(file));
   }
 
-  public void writeChapter(String name, int chapter) {
-    try {
-      String[] array = getFile(FileHandler.getChapterList());
-
-      // Assume default encoding.
-      FileWriter fileWriter = new FileWriter(chapterList);
-
-      // Always wrap FileWriter in BufferedWriter.
-      BufferedWriter out = new BufferedWriter(fileWriter);
-
-      for (String line : array) {
-        if (line != null) {
-          if (!line.split("([$])")[0].equals(name)) {
-            out.write(line);
-            out.newLine();
-          }
-        }
-      }
-
-      out.append(name);
-      out.append("$");
-      out.append(String.valueOf(chapter));
-      out.newLine();
-
-      // Always close files.
-      out.close();
-    } catch (IOException ex) {
-      System.out.println("Error writing to file '" + chapterList + "'");
+  /**
+   * Change 1 entry from a manga.
+   *
+   * @param array array to change
+   * @param manga manga which the entry is going to change.
+   * @param data  the data to change.
+   * @param type  the entry you want to change. (chapter, download, url)
+   * @return changed array.
+   */
+  private static ArrayList<String[]> editJson(
+          ArrayList<String[]> array, String manga, String data, String type) {
+    switch (type) {
+      case "chapter":
+        return editJson(array, manga, null, null, data);
+      case "download":
+        return editJson(array, manga, null, data, null);
+      case "url":
+        return editJson(array, manga, data, null, null);
+      default:
+        return editJson(array, manga, null, null, null);
     }
   }
 
-  public int readChapter(String name) {
-    String[] logList = getFile(FileHandler.getChapterList());
-    int chapter = 0;
-    try {
-      for (String log : logList) {
-        if (log != null) {
-          String[] logArray = log.split("([$])");
-          if (logArray[0].equals(name)) {
-            chapter = Integer.parseInt(logArray[1]);
-          }
-        }
+  /**
+   * Change 1 entry from a array.
+   *
+   * @param array    array to change
+   * @param manga    manga which the entry is going to change.
+   * @param url      changed url
+   * @param download changed download state
+   * @param chapter  changed chapter number
+   * @return changed array
+   */
+  private static ArrayList<String[]> editJson(
+          ArrayList<String[]> array, String manga, String url, String download, String chapter) {
+    ArrayList<String[]> newArray = new ArrayList<>();
+    for (String[] i : array) {
+      if (i[0].equals(manga)) {
+        if (url != null) i[1] = url;
+        if (download != null) i[2] = download;
+        if (chapter != null) i[3] = chapter;
       }
-    } catch (Exception e) {
-      System.out.println("error=" + e.getMessage());
+      newArray.add(i);
     }
-    return chapter;
+    return newArray;
+  }
+
+  /**
+   * Write JSONArray back to the file.
+   *
+   * @param array content that is going to be write to the file.
+   */
+  public static void writeJSON(ArrayList<String[]> array) {
+    // Write JSON file
+    try (FileWriter file = new FileWriter("manga.json")) {
+      JSONArray jsonArray = new JSONArray();
+      JSONObject bigTmp = new JSONObject();
+      for (String[] i : array) {
+        JSONObject tmp = new JSONObject();
+        tmp.put("url", i[1]);
+        tmp.put("download", i[2]);
+        tmp.put("chapter", i[3]);
+        bigTmp.put(i[0], tmp);
+      }
+      jsonArray.add(bigTmp);
+      file.write(jsonArray.toJSONString());
+      file.flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -191,17 +184,53 @@ class FileHandler {
    * @param url Url that is going to be checked.
    * @return true if url is in the file.
    */
-  public boolean checkByUrl(String url) {
+  public static boolean checkByUrl(String url) {
     boolean output = false;
-    String[] list = getFile(FileHandler.getMangaList());
-    for (String smallList : list) {
-      if (smallList != null) {
-        String[] array = smallList.split("([$])");
-        if (array[1].equals(url)) {
-          output = true;
-        }
+    ArrayList<String[]> list = getFile(mangaList);
+    for (String[] array : list) {
+      if (array[1].equals(url)) {
+        output = true;
+        break;
       }
     }
     return output;
+  }
+
+  /**
+   * Return amount of chapters.
+   *
+   * @param nameManga Name of the manga where you want to know the amount of chapters from.
+   * @return number of chapters.
+   */
+  public static int readChapter(String nameManga) {
+    int chapter = 0;
+    ArrayList<String[]> array = parseMangaObject(readJsonFile(mangaList));
+    for (String[] i : array) if (i[0].equals(nameManga)) chapter = Integer.parseInt(i[3]);
+    return chapter;
+  }
+
+  /**
+   * Write new chapter number to file.
+   *
+   * @param mangaName  Name of manga were the chapter number changes.
+   * @param newChapter The number to change for the chapter.
+   */
+  public static void writeChapter(String mangaName, int newChapter) {
+    ArrayList<String[]> array = getFile(mangaList);
+    array = editJson(array, mangaName, String.valueOf(newChapter), "chapter");
+    writeJSON(array);
+  }
+
+  /**
+   * Write new manga to file.
+   *
+   * @param name         name of manga.
+   * @param url          url of manga.
+   * @param downloadBool boolean state for manga.
+   */
+  public static void writeManga(String name, String url, boolean downloadBool) {
+    ArrayList<String[]> array = getFile(mangaList);
+    array.add(new String[]{name, url, String.valueOf(downloadBool), "0"}); // [manga, url, download, chapter]
+    writeJSON(array);
   }
 }

@@ -8,12 +8,12 @@ import java.util.Objects;
 
 class Download extends Thread {
   private final String threadName;
-  private final String urlList;
+  private final String[] mangaList;
   private Thread t;
 
-  Download(String urlList, String name) {
+  Download(String[] mangaList, String name) {
     threadName = "downloader-" + name;
-    this.urlList = urlList;
+    this.mangaList = mangaList;
   }
 
   public static boolean testUrl(String url) {
@@ -159,18 +159,15 @@ class Download extends Thread {
   }
 
   public void run() {
-    //    System.out.println("Running " + threadName);
-    FileHandler handler = new FileHandler();
     Spider spider = new Spider();
-    if (urlList != null) {
-      String[] array = urlList.split("([$])");
-      String mangaName = array[0];
-      String url = array[1];
-      boolean downloadBool = Boolean.parseBoolean(array[2]);
-      int oldChapter = handler.readChapter(mangaName);
+    if (mangaList != null) {
+      String mangaName = mangaList[0];
+      String url = mangaList[1];
+      boolean downloadBool = Boolean.parseBoolean(mangaList[2]);
+      int oldChapter = FileHandler.readChapter(mangaName);
       int newChapter = this.allChapters(url, spider);
       if (oldChapter != newChapter) {
-        handler.writeChapter(mangaName, newChapter);
+        FileHandler.writeChapter(mangaName, newChapter);
       }
       if (downloadBool) {
         DownloadManga(spider, mangaName);
@@ -180,7 +177,6 @@ class Download extends Thread {
   }
 
   public void start() {
-    //    System.out.println("Starting " + threadName);
     if (t == null) {
       t = new Thread(this, threadName);
       t.start();

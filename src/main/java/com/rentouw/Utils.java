@@ -43,7 +43,7 @@ class Utils {
     FileHandler handler = new FileHandler();
     System.out.print("\turl of the new manga :");
     String url = input.nextLine();
-    if (!handler.checkByUrl(url)) {
+    if (!FileHandler.checkByUrl(url)) {
       String[] urlList = url.split("/");
       if (urlList[2].equals("manganelo.com") || urlList[2].equals("mangakakalot.com")) {
         String name = urlList[4];
@@ -58,7 +58,7 @@ class Utils {
         }
         System.out.println("Checking getting urls for " + name);
         if (Download.testUrl(url)) {
-          handler.writeManga(name, url, downloadBool);
+          FileHandler.writeManga(name, url, downloadBool);
         } else {
           System.out.println("\tSorry seems like there are no images on this site.");
         }
@@ -72,83 +72,30 @@ class Utils {
 
   public static void remove() {
     Scanner input = new Scanner(System.in);
-    FileHandler handler = new FileHandler();
     show();
     System.out.print("\tnumber of the manga to remove :");
     int number = input.nextInt();
-    ArrayList<String> newMangaList = new ArrayList<>();
-    ArrayList<String> newChapterList = new ArrayList<>();
-    String[] mangaList = FileHandler.getFile(FileHandler.getMangaList());
-    if (number <= mangaList.length) {
-      for (String manga : mangaList) {
-        if (manga != null) {
-          if (!manga.equals(mangaList[number])) {
-            newMangaList.add(manga);
-          }
+    ArrayList<String[]> mangaList = FileHandler.getFile(FileHandler.getMangaList());
+    ArrayList<String[]> newMangaList = new ArrayList<>();
+    if (number <= mangaList.size()) {
+      int i = 0;
+      for (String[] manga : mangaList) {
+        if (i != number) {
+          newMangaList.add(manga);
         }
+        i++;
       }
-
-      String[] chapterList = FileHandler.getFile(FileHandler.getChapterList());
-      for (String chapter : chapterList) {
-        if (chapter != null) {
-          if (!chapter.equals(chapterList[number])) {
-            newChapterList.add(chapter);
-          }
-        }
-      }
-
-      String file = FileHandler.getMangaList();
-      File f = new File(file);
-      f.delete();
-      try {
-        f.createNewFile();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      for (String manga : newMangaList) {
-        handler.writeManga(manga);
-      }
-
-      file = FileHandler.getChapterList();
-      f = new File(file);
-      f.delete();
-      try {
-        f.createNewFile();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      for (String chapter : newChapterList) {
-        handler.writeChapter(chapter);
-      }
+      FileHandler.writeJSON(newMangaList);
     }
   }
 
   public static void show() {
     System.out.println("name(chapter)[install]");
-    String[] allMangas = FileHandler.getFile(FileHandler.getMangaList());
-    String[] allChapters = FileHandler.getFile(FileHandler.getChapterList());
-    for (int i = 0; i < allMangas.length; i++) {
-      String manga = allMangas[i];
-      String chapter = allChapters[i];
-      if (manga != null) {
-        String[] mangaList = manga.split("([$])");
-        if (chapter != null) {
-          String[] chapterList = chapter.split("([$])");
-          System.out.println(
-              "\t-"
-                  + i
-                  + " "
-                  + mangaList[0]
-                  + " ("
-                  + chapterList[1]
-                  + ")"
-                  + "["
-                  + mangaList[2]
-                  + "]");
-        } else {
-          System.out.println("\t-" + i + " " + mangaList[0] + "[" + mangaList[2] + "]");
-        }
-      }
+    ArrayList<String[]> allMangas = FileHandler.getFile(FileHandler.getMangaList());
+    int i = 0;
+    for (String[] manga : allMangas) {
+      System.out.println("\t-" + i + " " + manga[0] + " (" + manga[3] + ")" + "[" + manga[2] + "]");
+      i++;
     }
   }
 
@@ -170,12 +117,11 @@ class Utils {
 
   public static ArrayList<String> checkNewFiles() {
     String root = FileHandler.getRootFolder();
-    String[] mangasArray = FileHandler.getFile(FileHandler.getMangaList());
+    ArrayList<String[]> mangasArray = FileHandler.getFile(FileHandler.getMangaList());
     ArrayList<String> files = new ArrayList<>();
     String folder;
     try {
-      for (String mangaArray : mangasArray) {
-        String[] mangaList = mangaArray.split("([$])");
+      for (String[] mangaList : mangasArray) {
         String manga = mangaList[0];
         folder = root + "/" + manga + "_cbz/";
         if (testPath(folder)) {

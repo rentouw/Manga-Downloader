@@ -81,11 +81,11 @@ class Main {
 
   private static void download() {
     System.out.println("        DOWNLOAD\n" + "------------------------------------");
-    String[] bigList = FileHandler.getFile(FileHandler.getMangaList());
+    ArrayList<String[]> bigList = FileHandler.getFile(FileHandler.getMangaList());
     Download download;
     int i = 1;
-    ExecutorService executor = Executors.newFixedThreadPool(bigList.length);
-    for (String list : bigList) {
+    ExecutorService executor = Executors.newFixedThreadPool(bigList.size());
+    for (String[] list : bigList) {
       if (list != null) {
         download = new Download(list, Integer.toString(i));
         executor.execute(download);
@@ -94,7 +94,8 @@ class Main {
     }
     executor.shutdown();
     System.out.println("Downloading output:");
-    while (!executor.isTerminated()) {}
+    while (!executor.isTerminated()) {
+    }
   }
 
   private static void readConfig() {
