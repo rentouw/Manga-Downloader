@@ -107,8 +107,8 @@ class Utils {
       File f = new File(filePath);
       try {
         Files.copy(
-                Paths.get(f.getAbsolutePath()),
-                Paths.get(FileHandler.getRootFolder() + "newFiles/" + f.getName()));
+            Paths.get(f.getAbsolutePath()),
+            Paths.get(FileHandler.getRootFolder() + "newFiles/" + f.getName()));
       } catch (IOException e) {
         System.out.println(f.getName() + " is already in the newFiles folder.");
       }

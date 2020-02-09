@@ -1,15 +1,14 @@
 package com.rentouw;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 class FileHandler {
   private static String rootFolder = "";
@@ -74,7 +73,7 @@ class FileHandler {
    *
    * @param mangaList JSONArray with all the files.
    * @return Nested array with every manga and info about the manga organized as [manga, url,
-   * download, chapter]
+   *     download, chapter]
    */
   private static ArrayList<String[]> parseMangaObject(JSONArray mangaList) {
     // Get json keys within list
@@ -85,12 +84,12 @@ class FileHandler {
       JSONObject mangaObject = (JSONObject) ((JSONObject) mangaList.get(0)).get(key);
       // Make temp array
       String[] tmp =
-              new String[]{
-                      String.valueOf(key),
-                      (String) mangaObject.get("url"),
-                      (String) mangaObject.get("download"),
-                      (String) mangaObject.get("chapter")
-              };
+          new String[] {
+            String.valueOf(key),
+            (String) mangaObject.get("url"),
+            (String) mangaObject.get("download"),
+            (String) mangaObject.get("chapter")
+          };
       array.add(tmp);
     }
     return array;
@@ -111,12 +110,12 @@ class FileHandler {
    *
    * @param array array to change
    * @param manga manga which the entry is going to change.
-   * @param data  the data to change.
-   * @param type  the entry you want to change. (chapter, download, url)
+   * @param data the data to change.
+   * @param type the entry you want to change. (chapter, download, url)
    * @return changed array.
    */
   private static ArrayList<String[]> editJson(
-          ArrayList<String[]> array, String manga, String data, String type) {
+      ArrayList<String[]> array, String manga, String data, String type) {
     switch (type) {
       case "chapter":
         return editJson(array, manga, null, null, data);
@@ -132,15 +131,15 @@ class FileHandler {
   /**
    * Change 1 entry from a array.
    *
-   * @param array    array to change
-   * @param manga    manga which the entry is going to change.
-   * @param url      changed url
+   * @param array array to change
+   * @param manga manga which the entry is going to change.
+   * @param url changed url
    * @param download changed download state
-   * @param chapter  changed chapter number
+   * @param chapter changed chapter number
    * @return changed array
    */
   private static ArrayList<String[]> editJson(
-          ArrayList<String[]> array, String manga, String url, String download, String chapter) {
+      ArrayList<String[]> array, String manga, String url, String download, String chapter) {
     ArrayList<String[]> newArray = new ArrayList<>();
     for (String[] i : array) {
       if (i[0].equals(manga)) {
@@ -212,7 +211,7 @@ class FileHandler {
   /**
    * Write new chapter number to file.
    *
-   * @param mangaName  Name of manga were the chapter number changes.
+   * @param mangaName Name of manga were the chapter number changes.
    * @param newChapter The number to change for the chapter.
    */
   public static void writeChapter(String mangaName, int newChapter) {
@@ -224,13 +223,16 @@ class FileHandler {
   /**
    * Write new manga to file.
    *
-   * @param name         name of manga.
-   * @param url          url of manga.
+   * @param name name of manga.
+   * @param url url of manga.
    * @param downloadBool boolean state for manga.
    */
   public static void writeManga(String name, String url, boolean downloadBool) {
     ArrayList<String[]> array = getFile(mangaList);
-    array.add(new String[]{name, url, String.valueOf(downloadBool), "0"}); // [manga, url, download, chapter]
+    array.add(
+        new String[] {
+          name, url, String.valueOf(downloadBool), "0"
+        }); // [manga, url, download, chapter]
     writeJSON(array);
   }
 }

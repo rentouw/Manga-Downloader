@@ -94,8 +94,7 @@ class Main {
     }
     executor.shutdown();
     System.out.println("Downloading output:");
-    while (!executor.isTerminated()) {
-    }
+    while (!executor.isTerminated()) {}
   }
 
   private static void readConfig() {
