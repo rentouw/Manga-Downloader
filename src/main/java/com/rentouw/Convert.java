@@ -8,21 +8,20 @@ import java.util.zip.ZipOutputStream;
 
 class Convert {
   public static void convert(String nameManga) {
-    FileHandler handler = new FileHandler();
     String map_prefix = "00";
     String cbzFolder = FileHandler.getRootFolder() + nameManga + "_cbz/";
     FileHandler.makePath(cbzFolder);
-    for (int i = 0; i < handler.readChapter(nameManga); i++) {
+    for (int i = 0; i < FileHandler.readChapter(nameManga); i++) {
       if (i >= 10 && i < 100) map_prefix = "0";
       else if (i >= 100) map_prefix = "";
 
       if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")) {
         System.out.println(
-            "Making "
-                + FileHandler.getRootFolder()
-                + nameManga
-                + "_cbz/"
-                + map_prefix
+                "Making "
+                        + FileHandler.getRootFolder()
+                        + nameManga
+                        + "_cbz/"
+                        + map_prefix
                 + i
                 + ".cbz");
         try {

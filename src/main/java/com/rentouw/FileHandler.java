@@ -10,6 +10,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * <h1>FileHandeling</h1>
+ * This class has functions to work with the files.
+ * So you can read and write to and form the manga.json file.
+ *
+ * @author Rentouw
+ * @version 1.1
+ * @since 2020-02-10
+ */
+@SuppressWarnings("unchecked")
 class FileHandler {
   private static String rootFolder = "./";
   private static String mangaList = "manga.json";
@@ -84,12 +94,12 @@ class FileHandler {
       JSONObject mangaObject = (JSONObject) ((JSONObject) mangaList.get(0)).get(key);
       // Make temp array
       String[] tmp =
-          new String[] {
-            String.valueOf(key),
-            (String) mangaObject.get("url"),
-            (String) mangaObject.get("download"),
-            (String) mangaObject.get("chapter")
-          };
+              new String[] {
+                      String.valueOf(key),
+                      (String) mangaObject.get("url"),
+                      (String) mangaObject.get("download"),
+                      (String) mangaObject.get("chapter")
+              };
       array.add(tmp);
     }
     return array;
@@ -115,7 +125,7 @@ class FileHandler {
    * @return changed array.
    */
   private static ArrayList<String[]> editJson(
-      ArrayList<String[]> array, String manga, String data, String type) {
+          ArrayList<String[]> array, String manga, String data, String type) {
     switch (type) {
       case "chapter":
         return editJson(array, manga, null, null, data);
@@ -139,7 +149,7 @@ class FileHandler {
    * @return changed array
    */
   private static ArrayList<String[]> editJson(
-      ArrayList<String[]> array, String manga, String url, String download, String chapter) {
+          ArrayList<String[]> array, String manga, String url, String download, String chapter) {
     ArrayList<String[]> newArray = new ArrayList<>();
     for (String[] i : array) {
       if (i[0].equals(manga)) {
@@ -230,9 +240,9 @@ class FileHandler {
   public static void writeManga(String name, String url, boolean downloadBool) {
     ArrayList<String[]> array = getFile(mangaList);
     array.add(
-        new String[] {
-          name, url, String.valueOf(downloadBool), "0"
-        }); // [manga, url, download, chapter]
+            new String[] {
+                    name, url, String.valueOf(downloadBool), "0"
+            }); // [manga, url, download, chapter]
     writeJSON(array);
   }
 }

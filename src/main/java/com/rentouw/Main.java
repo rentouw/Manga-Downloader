@@ -49,16 +49,19 @@ class Main {
         case 6:
           System.out.println(
               "\nBye\n"
-                  + "                   _____\n"
-                  + "                  /     \\\n"
-                  + "                  vvvvvvv  /|__/|\n"
-                  + "                     I   /O,O   |\n"
-                  + "                     I /_____   |      /|/|\n"
-                  + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
-                  + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
-                  + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
-                  + "            \n\n");
+                      + "                   _____\n"
+                      + "                  /     \\\n"
+                      + "                  vvvvvvv  /|__/|\n"
+                      + "                     I   /O,O   |\n"
+                      + "                     I /_____   |      /|/|\n"
+                      + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
+                      + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
+                      + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
+                      + "            \n\n");
           System.exit(0);
+        case 7:
+          GUI.startGUI(FileHandler.getFile(FileHandler.getMangaList()));
+          break;
         default:
           System.out.println("Pls select 1-5.");
       }
