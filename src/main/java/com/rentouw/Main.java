@@ -48,16 +48,16 @@ class Main {
           break;
         case 6:
           System.out.println(
-              "\nBye\n"
-                      + "                   _____\n"
-                      + "                  /     \\\n"
-                      + "                  vvvvvvv  /|__/|\n"
-                      + "                     I   /O,O   |\n"
-                      + "                     I /_____   |      /|/|\n"
-                      + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
-                      + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
-                      + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
-                      + "            \n\n");
+                  "\nBye\n"
+                          + "                   _____\n"
+                          + "                  /     \\\n"
+                          + "                  vvvvvvv  /|__/|\n"
+                          + "                     I   /O,O   |\n"
+                          + "                     I /_____   |      /|/|\n"
+                          + "                    J|/^ ^ ^ \\  |    /00  |    _//| \n"
+                          + "                     |^ ^ ^ ^ |W|   |/^^\\ |   /oo | \n"
+                          + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
+                          + "            \n\n");
           System.exit(0);
         case 7:
           GUI.startGUI(FileHandler.getFile(FileHandler.getMangaList()));
@@ -68,6 +68,9 @@ class Main {
     }
   }
 
+  /**
+   * Show the new downloaded files.
+   */
   private static void newFiles() {
     Utils.show();
     System.out.println("\n");
@@ -82,24 +85,27 @@ class Main {
     }
   }
 
+  /** Download method. */
   private static void download() {
     System.out.println("        DOWNLOAD\n" + "------------------------------------");
     ArrayList<String[]> bigList = FileHandler.getFile(FileHandler.getMangaList());
     Download download;
     int i = 1;
     ExecutorService executor = Executors.newFixedThreadPool(bigList.size());
-    for (String[] list : bigList) {
-      if (list != null) {
-        download = new Download(list, Integer.toString(i));
+    for (String[] mangaDetails : bigList) {
+      if (mangaDetails != null) {
+        download = new Download(mangaDetails, Integer.toString(i));
         executor.execute(download);
         i += 1;
       }
     }
     executor.shutdown();
     System.out.println("Downloading output:");
-    while (!executor.isTerminated()) {}
+    while (!executor.isTerminated()) {
+    }
   }
 
+  /** Read config file to update root location. */
   private static void readConfig() {
     Config properties = new Config();
     String location = properties.getPropValues();

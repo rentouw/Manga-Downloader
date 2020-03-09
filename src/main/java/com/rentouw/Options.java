@@ -31,21 +31,25 @@ public class Options {
     }
   }
 
-  private static void changeLocationAsk() {
-    Scanner input = new Scanner(System.in);
-    System.out.println("Current location=" + FileHandler.getMangaList());
-    System.out.print("What is going to be the new location : ");
-    String location = input.nextLine();
-    changeLocation(location);
-    System.out.println("New location is =" + FileHandler.getMangaList());
-    Utils.enter();
-  }
-
-  protected static void changeLocation(String location) {
-    if (location != null) {
-      if (!location.substring(location.length() - 1).equals("/")) location = location + "/";
-      FileHandler.setRootFolder(location);
-      FileHandler.setMangaList(location + "manga.json");
+    /**
+     * Change location input method
+     */
+    private static void changeLocationAsk() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Current location=" + FileHandler.getMangaList());
+        System.out.print("What is going to be the new location : ");
+        String location = input.nextLine();
+        changeLocation(location);
+        System.out.println("New location is =" + FileHandler.getMangaList());
+        Utils.enter();
     }
-  }
+
+    /** Change location method */
+    protected static void changeLocation(String location) {
+        if (location != null) {
+            if (!location.substring(location.length() - 1).equals("/")) location = location + "/";
+            FileHandler.setRootFolder(location);
+            FileHandler.setMangaList(location + "manga.json");
+        }
+    }
 }

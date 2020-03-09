@@ -32,12 +32,16 @@ class Utils {
     return new File(path).exists();
   }
 
+  /**
+   * Make a Press enter dialog
+   */
   public static void enter() {
     Scanner input = new Scanner(System.in);
     System.out.println("Press enter key to continue...");
     input.nextLine();
   }
 
+  /** Add manga to manga.json file. */
   public static void add() {
     Scanner input = new Scanner(System.in);
     System.out.print("\turl of the new manga :");
@@ -69,6 +73,7 @@ class Utils {
     }
   }
 
+  /** Remove manga form manga.json file. */
   public static void remove() {
     Scanner input = new Scanner(System.in);
     show();
@@ -79,15 +84,14 @@ class Utils {
     if (number <= mangaList.size()) {
       int i = 0;
       for (String[] manga : mangaList) {
-        if (i != number) {
-          newMangaList.add(manga);
-        }
+        if (i != number) newMangaList.add(manga);
         i++;
       }
       FileHandler.writeJSON(newMangaList);
     }
   }
 
+  /** Show all the manga's. */
   public static void show() {
     System.out.println("name(chapter)[install]");
     ArrayList<String[]> allMangas = FileHandler.getFile(FileHandler.getMangaList());
@@ -98,6 +102,11 @@ class Utils {
     }
   }
 
+  /**
+   * Copy files to root/newFiles/ folder.
+   *
+   * @param files Files that need to be moved.
+   */
   public static void moveNewFiles(ArrayList<String> files) {
     if (!FileHandler.checkFile(FileHandler.getRootFolder() + "newFiles/"))
       FileHandler.makePath(FileHandler.getRootFolder() + "newFiles/");
@@ -105,14 +114,19 @@ class Utils {
       File f = new File(filePath);
       try {
         Files.copy(
-            Paths.get(f.getAbsolutePath()),
-            Paths.get(FileHandler.getRootFolder() + "newFiles/" + f.getName()));
+                Paths.get(f.getAbsolutePath()),
+                Paths.get(FileHandler.getRootFolder() + "newFiles/" + f.getName()));
       } catch (IOException e) {
         System.out.println(f.getName() + " is already in the newFiles folder.");
       }
     }
   }
 
+  /**
+   * Check which files are newly downloaded.
+   *
+   * @return array with all the new files.
+   */
   public static ArrayList<String> checkNewFiles() {
     String root = FileHandler.getRootFolder();
     ArrayList<String[]> mangasArray = FileHandler.getFile(FileHandler.getMangaList());
@@ -142,6 +156,11 @@ class Utils {
     return files;
   }
 
+  /**
+   * Remove all files in a folder.
+   *
+   * @param file Folder as File object.
+   */
   public static void recursiveDelete(File file) {
     // to end the recursive loop
     if (!file.exists()) return;

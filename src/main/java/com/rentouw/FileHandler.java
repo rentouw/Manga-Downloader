@@ -10,21 +10,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-/**
- * <h1>FileHandeling</h1>
- * This class has functions to work with the files.
- * So you can read and write to and form the manga.json file.
- *
- * @author Rentouw
- * @version 1.1
- * @since 2020-02-10
- */
-@SuppressWarnings("unchecked")
 class FileHandler {
   private static String rootFolder = "./";
   private static String mangaList = "manga.json";
 
   public FileHandler() {
+    // Check if settings files are made.
     if (!checkFile(mangaList)) {
       File f = new File(mangaList);
       try {
@@ -33,10 +24,6 @@ class FileHandler {
         System.out.println("Error=" + e.getMessage());
       }
     }
-  }
-
-  public static void makePath(String path) {
-    new File(path).mkdirs();
   }
 
   public static String getRootFolder() {
@@ -55,6 +42,22 @@ class FileHandler {
     FileHandler.mangaList = mangaList;
   }
 
+  /**
+   * Make a folder.
+   *
+   * @param path Location for your new map.
+   * @return boolean for folder made.
+   */
+  public static boolean makePath(String path) {
+    return new File(path).mkdirs();
+  }
+
+  /**
+   * Check of a file exists.
+   *
+   * @param path location of the path
+   * @return Boolean true if file exists
+   */
   public static boolean checkFile(String path) {
     return new File(path).exists();
   }
@@ -94,12 +97,12 @@ class FileHandler {
       JSONObject mangaObject = (JSONObject) ((JSONObject) mangaList.get(0)).get(key);
       // Make temp array
       String[] tmp =
-              new String[] {
+              new String[]{
                       String.valueOf(key),
                       (String) mangaObject.get("url"),
                       (String) mangaObject.get("download"),
                       (String) mangaObject.get("chapter")
-              };
+          };
       array.add(tmp);
     }
     return array;
@@ -120,8 +123,8 @@ class FileHandler {
    *
    * @param array array to change
    * @param manga manga which the entry is going to change.
-   * @param data the data to change.
-   * @param type the entry you want to change. (chapter, download, url)
+   * @param data  the data to change.
+   * @param type  the entry you want to change. (chapter, download, url)
    * @return changed array.
    */
   private static ArrayList<String[]> editJson(
@@ -141,11 +144,11 @@ class FileHandler {
   /**
    * Change 1 entry from a array.
    *
-   * @param array array to change
-   * @param manga manga which the entry is going to change.
-   * @param url changed url
+   * @param array    array to change
+   * @param manga    manga which the entry is going to change.
+   * @param url      changed url
    * @param download changed download state
-   * @param chapter changed chapter number
+   * @param chapter  changed chapter number
    * @return changed array
    */
   private static ArrayList<String[]> editJson(
@@ -240,9 +243,9 @@ class FileHandler {
   public static void writeManga(String name, String url, boolean downloadBool) {
     ArrayList<String[]> array = getFile(mangaList);
     array.add(
-            new String[] {
+            new String[]{
                     name, url, String.valueOf(downloadBool), "0"
-            }); // [manga, url, download, chapter]
+        }); // [manga, url, download, chapter]
     writeJSON(array);
   }
 }
