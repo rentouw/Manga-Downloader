@@ -97,11 +97,11 @@ class FileHandler {
       JSONObject mangaObject = (JSONObject) ((JSONObject) mangaList.get(0)).get(key);
       // Make temp array
       String[] tmp =
-              new String[]{
-                      String.valueOf(key),
-                      (String) mangaObject.get("url"),
-                      (String) mangaObject.get("download"),
-                      (String) mangaObject.get("chapter")
+          new String[] {
+            String.valueOf(key),
+            (String) mangaObject.get("url"),
+            (String) mangaObject.get("download"),
+            (String) mangaObject.get("chapter")
           };
       array.add(tmp);
     }
@@ -123,12 +123,12 @@ class FileHandler {
    *
    * @param array array to change
    * @param manga manga which the entry is going to change.
-   * @param data  the data to change.
-   * @param type  the entry you want to change. (chapter, download, url)
+   * @param data the data to change.
+   * @param type the entry you want to change. (chapter, download, url)
    * @return changed array.
    */
   private static ArrayList<String[]> editJson(
-          ArrayList<String[]> array, String manga, String data, String type) {
+      ArrayList<String[]> array, String manga, String data, String type) {
     switch (type) {
       case "chapter":
         return editJson(array, manga, null, null, data);
@@ -144,15 +144,15 @@ class FileHandler {
   /**
    * Change 1 entry from a array.
    *
-   * @param array    array to change
-   * @param manga    manga which the entry is going to change.
-   * @param url      changed url
+   * @param array array to change
+   * @param manga manga which the entry is going to change.
+   * @param url changed url
    * @param download changed download state
-   * @param chapter  changed chapter number
+   * @param chapter changed chapter number
    * @return changed array
    */
   private static ArrayList<String[]> editJson(
-          ArrayList<String[]> array, String manga, String url, String download, String chapter) {
+      ArrayList<String[]> array, String manga, String url, String download, String chapter) {
     ArrayList<String[]> newArray = new ArrayList<>();
     for (String[] i : array) {
       if (i[0].equals(manga)) {
@@ -243,8 +243,8 @@ class FileHandler {
   public static void writeManga(String name, String url, boolean downloadBool) {
     ArrayList<String[]> array = getFile(mangaList);
     array.add(
-            new String[]{
-                    name, url, String.valueOf(downloadBool), "0"
+        new String[] {
+          name, url, String.valueOf(downloadBool), "0"
         }); // [manga, url, download, chapter]
     writeJSON(array);
   }

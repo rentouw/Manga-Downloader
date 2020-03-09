@@ -32,9 +32,7 @@ class Utils {
     return new File(path).exists();
   }
 
-  /**
-   * Make a Press enter dialog
-   */
+  /** Make a Press enter dialog */
   public static void enter() {
     Scanner input = new Scanner(System.in);
     System.out.println("Press enter key to continue...");
@@ -114,8 +112,8 @@ class Utils {
       File f = new File(filePath);
       try {
         Files.copy(
-                Paths.get(f.getAbsolutePath()),
-                Paths.get(FileHandler.getRootFolder() + "newFiles/" + f.getName()));
+            Paths.get(f.getAbsolutePath()),
+            Paths.get(FileHandler.getRootFolder() + "newFiles/" + f.getName()));
       } catch (IOException e) {
         System.out.println(f.getName() + " is already in the newFiles folder.");
       }

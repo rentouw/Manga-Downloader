@@ -34,13 +34,13 @@ public class GUI {
     panel = createTextArea("Welcome to manga Downloader.", new Rectangle(375, 10, 345, 400));
 
     JButton downloadButton =
-            createButton("Download", new Rectangle(50, 500, 125, 40), actionEvent -> downloadMethode());
+        createButton("Download", new Rectangle(50, 500, 125, 40), actionEvent -> downloadMethode());
 
     JButton addButton =
-            createButton("Add", new Rectangle(225, 500, 100, 40), actionEvent -> addMethode(f));
+        createButton("Add", new Rectangle(225, 500, 100, 40), actionEvent -> addMethode(f));
 
     JButton removeButton =
-            createButton("Remove", new Rectangle(375, 500, 100, 40), actionEvent -> removeMethode(f));
+        createButton("Remove", new Rectangle(375, 500, 100, 40), actionEvent -> removeMethode(f));
 
     f.add(panel); // add panel
     f.add(scrolllist); // adding list with scroll panel in JFrame
@@ -71,8 +71,7 @@ public class GUI {
     }
     executor.shutdown();
     panel.setText("Downloading output:");
-    while (!executor.isTerminated()) {
-    }
+    while (!executor.isTerminated()) {}
   }
 
   private static void removeMethode(JFrame f) {
@@ -87,25 +86,25 @@ public class GUI {
 
   private static ActionListener infoPopUp(JFrame f) {
     return e ->
-            JOptionPane.showMessageDialog(
-                    f,
-                    "This is a program to download manga and convert it to .cbz files.\n"
-                            + "Made by rentouw",
-                    "Info",
-                    JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(
+            f,
+            "This is a program to download manga and convert it to .cbz files.\n"
+                + "Made by rentouw",
+            "Info",
+            JOptionPane.PLAIN_MESSAGE);
   }
 
   private static void locationFunction(JFrame f) {
     String name =
-            JOptionPane.showInputDialog(
-                    f, "Want to change your root location?", FileHandler.getRootFolder());
+        JOptionPane.showInputDialog(
+            f, "Want to change your root location?", FileHandler.getRootFolder());
     if (!name.equals(FileHandler.getRootFolder())) {
       Options.changeLocation(name);
       JOptionPane.showMessageDialog(
-              f, "Location is updated to " + name, " Location", JOptionPane.PLAIN_MESSAGE);
+          f, "Location is updated to " + name, " Location", JOptionPane.PLAIN_MESSAGE);
     } else {
       JOptionPane.showMessageDialog(
-              f, "Location is still " + name, " Location", JOptionPane.PLAIN_MESSAGE);
+          f, "Location is still " + name, " Location", JOptionPane.PLAIN_MESSAGE);
     }
   }
 
@@ -125,23 +124,23 @@ public class GUI {
   }
 
   private static JScrollPane createScrollMangaPanel(
-          DefaultListModel<String> List, Rectangle dimension) {
+      DefaultListModel<String> List, Rectangle dimension) {
     JList<String> list = new JList<>(List);
     list.setCellRenderer(
-            new DefaultListCellRenderer() {
-              @Override
-              public Component getListCellRendererComponent(
-                      JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Component c =
-                        super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (isSelected) c.setBackground(Color.getHSBColor(18, 4, 75));
-                else {
-                  if (index % 2 == 0) c.setBackground(getBackground().darker());
-                  else c.setBackground(getBackground());
-                }
-                return c;
-              }
-            });
+        new DefaultListCellRenderer() {
+          @Override
+          public Component getListCellRendererComponent(
+              JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            Component c =
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (isSelected) c.setBackground(Color.getHSBColor(18, 4, 75));
+            else {
+              if (index % 2 == 0) c.setBackground(getBackground().darker());
+              else c.setBackground(getBackground());
+            }
+            return c;
+          }
+        });
     JScrollPane scrolllist = new JScrollPane(list);
     scrolllist.setBounds(dimension);
     return scrolllist;

@@ -32,7 +32,7 @@ public class Config {
    * Write value to file.
    *
    * @param value String value you want to save in the file.
-   * @param name  String name of value you are going to write.
+   * @param name String name of value you are going to write.
    */
   public void writeConfig(String value, String name) {
     File configFile = new File("config.properties");

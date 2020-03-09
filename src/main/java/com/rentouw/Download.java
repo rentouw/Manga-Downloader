@@ -16,7 +16,7 @@ class Download extends Thread {
 
   /**
    * @param mangaDetails List of the manga's details. (chapters,download,url)
-   * @param name         Name of the thread.
+   * @param name Name of the thread.
    */
   Download(String[] mangaDetails, String name) {
     this.threadName = "downloader-" + name;
@@ -26,8 +26,8 @@ class Download extends Thread {
 
   /**
    * @param mangaDetails List of the manga's details. (chapters,download,url)
-   * @param name         Name of the thread.
-   * @param panel        JTextArea where it needs to update.
+   * @param name Name of the thread.
+   * @param panel JTextArea where it needs to update.
    */
   public Download(String[] mangaDetails, String name, JTextArea panel, String textPanelText) {
     this.threadName = "downloader-" + name;
@@ -59,7 +59,7 @@ class Download extends Thread {
    * Download the full manga.
    *
    * @param spider Spider handler.
-   * @param name   name of the manga.
+   * @param name name of the manga.
    */
   private static void DownloadManga(Spider spider, String name) {
     List<List<String>> imgs = spider.getImagesPerUrl();
@@ -79,7 +79,7 @@ class Download extends Thread {
         String file = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + prefix + j;
         String oldFile = FileHandler.getRootFolder() + name + "/" + map_prefix + i + "/" + j;
         String cbzFolder =
-                FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz";
+            FileHandler.getRootFolder() + name + "_cbz/" + name + "_" + map_prefix + i + ".cbz";
         if (!FileHandler.checkFile(cbzFolder)) {
           if (fileCheckFull(file)) {
             try {
@@ -116,26 +116,26 @@ class Download extends Thread {
   /**
    * Check if file exits.
    *
-   * @param file    Location of the file.
+   * @param file Location of the file.
    * @param oldFile Location of the old file.
    * @return boolean if file is same as old file.
    */
   private static boolean fileCheckFull(String file, String oldFile) {
     if (oldFile != null)
       return !FileHandler.checkFile(file)
-              && !FileHandler.checkFile(oldFile + ".jpg")
-              && !FileHandler.checkFile(oldFile + ".png");
+          && !FileHandler.checkFile(oldFile + ".jpg")
+          && !FileHandler.checkFile(oldFile + ".png");
     else
       return !FileHandler.checkFile(file)
-              && !FileHandler.checkFile(file + ".jpg")
-              && !FileHandler.checkFile(file + ".png");
+          && !FileHandler.checkFile(file + ".jpg")
+          && !FileHandler.checkFile(file + ".png");
   }
 
   /**
    * Download a image.
    *
    * @param urlImg url of the image.
-   * @param path   path where to save the image.
+   * @param path path where to save the image.
    */
   private static void DownloadImage(String urlImg, String path) {
     // This will get input data from the server
@@ -150,7 +150,7 @@ class Download extends Thread {
 
       // This user agent is for if the server wants real humans to visit
       String USER_AGENT =
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 
       boolean notDone = true;
       while (notDone) {
@@ -182,12 +182,12 @@ class Download extends Thread {
 
     } catch (Exception ex) {
       System.out.println(
-              "Error downloading img on url "
-                      + urlImg
-                      + " to path "
-                      + path
-                      + "\nError = "
-                      + ex.getMessage());
+          "Error downloading img on url "
+              + urlImg
+              + " to path "
+              + path
+              + "\nError = "
+              + ex.getMessage());
     }
 
     // closing used resources
@@ -202,9 +202,7 @@ class Download extends Thread {
     }
   }
 
-  /**
-   * Run function for thread.
-   */
+  /** Run function for thread. */
   public void run() {
     Spider spider = new Spider();
     if (mangaDetails != null) {
@@ -220,9 +218,7 @@ class Download extends Thread {
     }
   }
 
-  /**
-   * Start function for thread.
-   */
+  /** Start function for thread. */
   public void start() {
     if (t == null) {
       t = new Thread(this, threadName);
@@ -233,7 +229,7 @@ class Download extends Thread {
   /**
    * Give the amount of chapters back.
    *
-   * @param url    String url for the manga.
+   * @param url String url for the manga.
    * @param spider Spider handler.
    * @return amount of chapters.
    */

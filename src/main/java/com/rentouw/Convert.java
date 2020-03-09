@@ -21,18 +21,18 @@ class Convert {
       else if (i >= 100) map_prefix = "";
       if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")) {
         System.out.println(
-                "Making "
-                        + FileHandler.getRootFolder()
-                        + nameManga
-                        + "_cbz/"
-                        + map_prefix
-                        + i
-                        + ".cbz");
+            "Making "
+                + FileHandler.getRootFolder()
+                + nameManga
+                + "_cbz/"
+                + map_prefix
+                + i
+                + ".cbz");
         zipFolder(
-                Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i),
-                Paths.get(cbzFolder + map_prefix + i + ".cbz"));
+            Paths.get(FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i),
+            Paths.get(cbzFolder + map_prefix + i + ".cbz"));
         new File(cbzFolder + map_prefix + i + ".cbz")
-                .renameTo(new File(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz"));
+            .renameTo(new File(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz"));
       }
     }
     File f = new File(FileHandler.getRootFolder() + nameManga);
@@ -43,23 +43,23 @@ class Convert {
    * Put all files in a folder into a zip file.
    *
    * @param sourceFolderPath Location of the folder.
-   * @param zipPath          Location for the made zip file.
+   * @param zipPath Location for the made zip file.
    */
   // Uses java.util.zip to create zip file
   private static void zipFolder(Path sourceFolderPath, Path zipPath) {
     try {
       ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath.toFile()));
       Files.walkFileTree(
-              sourceFolderPath,
-              new SimpleFileVisitor<Path>() {
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                        throws IOException {
-                  zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString()));
-                  Files.copy(file, zos);
-                  zos.closeEntry();
-                  return FileVisitResult.CONTINUE;
-                }
-              });
+          sourceFolderPath,
+          new SimpleFileVisitor<Path>() {
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                throws IOException {
+              zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString()));
+              Files.copy(file, zos);
+              zos.closeEntry();
+              return FileVisitResult.CONTINUE;
+            }
+          });
       zos.close();
     } catch (IOException e) {
       e.printStackTrace();
