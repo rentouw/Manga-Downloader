@@ -35,7 +35,7 @@ class FileHandler {
   }
 
   public static String getMangaList() {
-    return mangaList;
+    return rootFolder + mangaList;
   }
 
   public static void setMangaList(String mangaList) {
