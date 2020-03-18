@@ -212,12 +212,17 @@ class FileHandler {
    * Return amount of chapters.
    *
    * @param nameManga Name of the manga where you want to know the amount of chapters from.
+   * @param array Array with the full JSONArray.
    * @return number of chapters.
    */
-  public static int readChapter(String nameManga) {
+  public static int readChapter(String nameManga, ArrayList<String[]> array) {
     int chapter = 0;
-    ArrayList<String[]> array = parseMangaObject(readJsonFile(mangaList));
-    for (String[] i : array) if (i[0].equals(nameManga)) chapter = Integer.parseInt(i[3]);
+    if (array == null) array = parseMangaObject(readJsonFile(mangaList));
+    for (String[] i : array) {
+      if (i[0].equals(nameManga)) {
+        chapter = Integer.parseInt(i[3]);
+      }
+    }
     return chapter;
   }
 
@@ -226,9 +231,9 @@ class FileHandler {
    *
    * @param mangaName Name of manga were the chapter number changes.
    * @param newChapter The number to change for the chapter.
+   * @param array Array with all the JSON data.
    */
-  public static void writeChapter(String mangaName, int newChapter) {
-    ArrayList<String[]> array = getFile(mangaList);
+  public static void writeChapter(String mangaName, int newChapter, ArrayList<String[]> array) {
     array = editJson(array, mangaName, String.valueOf(newChapter), "chapter");
     writeJSON(array);
   }

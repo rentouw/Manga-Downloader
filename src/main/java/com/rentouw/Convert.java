@@ -3,6 +3,7 @@ package com.rentouw;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -12,11 +13,11 @@ class Convert {
    *
    * @param nameManga Name of the manga you want to convert.
    */
-  public static void convert(String nameManga) {
+  public static void convert(String nameManga, ArrayList<String[]> array) {
     String map_prefix = "00";
     String cbzFolder = FileHandler.getRootFolder() + nameManga + "_cbz/";
     FileHandler.makePath(cbzFolder);
-    for (int i = 0; i < FileHandler.readChapter(nameManga); i++) {
+    for (int i = 0; i < FileHandler.readChapter(nameManga, array); i++) {
       if (i >= 10 && i < 100) map_prefix = "0";
       else if (i >= 100) map_prefix = "";
       if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")) {

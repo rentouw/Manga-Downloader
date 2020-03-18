@@ -3,21 +3,25 @@ package com.rentouw;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 class Download extends Thread {
   private final String threadName;
   private final String[] mangaDetails;
+  private static ArrayList<String[]> JSONArrayParsed = new ArrayList<>();
   private Thread t;
 
   /**
    * @param mangaDetails List of the manga's details. (chapters,download,url)
    * @param name Name of the thread.
+   * @param jsonArrayParsed Array met al de JSONArray info.
    */
-  Download(String[] mangaDetails, String name) {
+  Download(String[] mangaDetails, String name, ArrayList<String[]> jsonArrayParsed) {
     this.threadName = "downloader-" + name;
     this.mangaDetails = mangaDetails;
+    JSONArrayParsed = jsonArrayParsed;
   }
 
   /**
@@ -82,7 +86,7 @@ class Download extends Thread {
       }
       i++;
     }
-    Convert.convert(name);
+    Convert.convert(name, JSONArrayParsed);
     Utils.recursiveDelete(new File(FileHandler.getRootFolder() + name));
   }
 
@@ -192,9 +196,10 @@ class Download extends Thread {
       String mangaName = mangaDetails[0];
       String url = mangaDetails[1];
       boolean downloadBool = Boolean.parseBoolean(mangaDetails[2]);
-      int oldChapter = FileHandler.readChapter(mangaName);
+      int oldChapter = FileHandler.readChapter(mangaName, JSONArrayParsed);
       int newChapter = this.allChapters(url, spider);
-      if (oldChapter != newChapter) FileHandler.writeChapter(mangaName, newChapter);
+      if (oldChapter != newChapter)
+        FileHandler.writeChapter(mangaName, newChapter, JSONArrayParsed);
       if (downloadBool) DownloadManga(spider, mangaName);
       System.out.println("\tDone downloading " + mangaName);
     }

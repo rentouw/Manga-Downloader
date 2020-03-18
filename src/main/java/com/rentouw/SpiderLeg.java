@@ -1,6 +1,5 @@
 package com.rentouw;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import org.jsoup.Connection;
@@ -46,7 +45,8 @@ class SpiderLeg {
           this.links.add(link.absUrl("href"));
         }
       }
-    } catch (IOException ioe) {
+    } catch (Exception ioe) {
+      System.out.println("test");
       // We were not successful in our HTTP request
     }
   }

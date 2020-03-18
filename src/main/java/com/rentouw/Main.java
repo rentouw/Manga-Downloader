@@ -87,9 +87,10 @@ class Main {
     Download download;
     int i = 1;
     ExecutorService executor = Executors.newFixedThreadPool(bigList.size());
+    ArrayList<String[]> jsonArrayParsed = FileHandler.getFile(FileHandler.getMangaList());
     for (String[] mangaDetails : bigList) {
       if (mangaDetails != null) {
-        download = new Download(mangaDetails, Integer.toString(i));
+        download = new Download(mangaDetails, Integer.toString(i), jsonArrayParsed);
         executor.execute(download);
         i += 1;
       }
