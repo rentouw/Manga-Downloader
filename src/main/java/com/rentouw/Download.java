@@ -5,12 +5,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.Objects;
-import javax.swing.*;
 
 class Download extends Thread {
   private final String threadName;
-  private static JTextArea panel = null;
-  private static String textPanelText = "";
   private final String[] mangaDetails;
   private Thread t;
 
@@ -21,19 +18,6 @@ class Download extends Thread {
   Download(String[] mangaDetails, String name) {
     this.threadName = "downloader-" + name;
     this.mangaDetails = mangaDetails;
-    panel = null;
-  }
-
-  /**
-   * @param mangaDetails List of the manga's details. (chapters,download,url)
-   * @param name Name of the thread.
-   * @param panel JTextArea where it needs to update.
-   */
-  public Download(String[] mangaDetails, String name, JTextArea panel, String textPanelText) {
-    this.threadName = "downloader-" + name;
-    this.mangaDetails = mangaDetails;
-    Download.panel = panel;
-    Download.textPanelText = textPanelText;
   }
 
   /**
@@ -49,8 +33,7 @@ class Download extends Thread {
       spider.search(url);
       return true;
     } catch (Exception ex) {
-      if (panel == null) System.out.println(ex.getMessage());
-      else panel.setText(ex.getMessage() + "\n");
+      System.out.println(ex.getMessage());
       return false;
     }
   }
@@ -213,8 +196,7 @@ class Download extends Thread {
       int newChapter = this.allChapters(url, spider);
       if (oldChapter != newChapter) FileHandler.writeChapter(mangaName, newChapter);
       if (downloadBool) DownloadManga(spider, mangaName);
-      if (panel == null) System.out.println("\tDone downloading " + mangaName);
-      else panel.setText(textPanelText + "\tDone downloading " + mangaName + "\n");
+      System.out.println("\tDone downloading " + mangaName);
     }
   }
 

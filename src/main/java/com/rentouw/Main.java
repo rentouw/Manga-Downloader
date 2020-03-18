@@ -59,11 +59,8 @@ class Main {
                   + "                      \\m___m__|_|    \\m_m_|   \\mm_| \n"
                   + "            \n\n");
           System.exit(0);
-        case 7:
-          GUI.startGUI(FileHandler.getFile(FileHandler.getMangaList()));
-          break;
         default:
-          System.out.println("Pls select 1-5.");
+          System.out.println("Pls select 1-6.");
       }
     }
   }
