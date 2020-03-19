@@ -42,7 +42,8 @@ class SpiderLeg {
         }
       }
       for (Element link : linksOnPage) {
-        if (link.parents().hasClass("panel-story-chapter-list") || link.parents().hasClass("chapter-list")) {
+        if (link.parents().hasClass("panel-story-chapter-list")
+            || link.parents().hasClass("chapter-list")) {
           this.links.add(link.absUrl("href"));
         }
       }
