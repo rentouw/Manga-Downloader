@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,11 +46,10 @@ class Download extends Thread {
   /**
    * Download the full manga.
    *
-   * @param spider Spider handler.
+   * @param imgs A list with lists of all the links to the images.
    * @param name name of the manga.
    */
-  private static void DownloadManga(Spider spider, String name) {
-    List<List<String>> imgs = spider.getImagesPerUrl();
+  private static void DownloadManga(List<List<String>> imgs, String name) {
     int i = 0;
     String imgurl;
     String map_prefix = "00";
@@ -191,16 +191,48 @@ class Download extends Thread {
 
   /** Run function for thread. */
   public void run() {
-    Spider spider = new Spider();
     if (mangaDetails != null) {
       String mangaName = mangaDetails[0];
       String url = mangaDetails[1];
+      List<String> chapterUrls = this.allChaptersUrls(url);
+      Collections.reverse(chapterUrls);
       boolean downloadBool = Boolean.parseBoolean(mangaDetails[2]);
       int oldChapter = FileHandler.readChapter(mangaName, JSONArrayParsed);
-      int newChapter = this.allChapters(url, spider);
-      if (oldChapter != newChapter)
+      int newChapter = chapterUrls.size();
+      if (chapterUrls.size() == 0) System.out.println("url=" + url);
+      if (oldChapter != newChapter) {
         FileHandler.writeChapter(mangaName, newChapter, JSONArrayParsed);
-      if (downloadBool) DownloadManga(spider, mangaName);
+        if (downloadBool) {
+          boolean download = false;
+          String map_prefix = "00";
+          for (int i = 0; i < newChapter; i++) {
+            if (i >= 10 && i < 100) map_prefix = "0";
+            else if (i >= 100) map_prefix = "";
+            if (!FileHandler.checkFile(
+                FileHandler.getRootFolder()
+                    + mangaName
+                    + "_cbz/"
+                    + mangaName
+                    + "_"
+                    + map_prefix
+                    + i
+                    + ".cbz")) {
+              download = true;
+              break;
+            }
+          }
+          if (download) {
+            List<List<String>> imgs = new ArrayList<>();
+            Spider spider = new Spider();
+            if (chapterUrls.size() == 0) System.out.println("url=" + url);
+            for (String chapterUrl : chapterUrls) {
+              spider.search(chapterUrl);
+              imgs.add(spider.getImagesPerUrl());
+            }
+            DownloadManga(imgs, mangaName);
+          }
+        }
+      }
       System.out.println("\tDone downloading " + mangaName);
     }
   }
@@ -217,10 +249,11 @@ class Download extends Thread {
    * Give the amount of chapters back.
    *
    * @param url String url for the manga.
-   * @param spider Spider handler.
    * @return amount of chapters.
    */
-  private int allChapters(String url, Spider spider) {
-    return spider.search(url).size();
+  private List<String> allChaptersUrls(String url) {
+    Spider spider = new Spider();
+    spider.search(url);
+    return spider.getChapterLinks();
   }
 }

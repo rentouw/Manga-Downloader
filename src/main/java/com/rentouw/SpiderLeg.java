@@ -1,5 +1,6 @@
 package com.rentouw;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import org.jsoup.Connection;
@@ -41,12 +42,11 @@ class SpiderLeg {
         }
       }
       for (Element link : linksOnPage) {
-        if (link.text().equals("NEXT CHAPTER")) {
+        if (link.parents().hasClass("panel-story-chapter-list") || link.parents().hasClass("chapter-list")) {
           this.links.add(link.absUrl("href"));
         }
       }
-    } catch (Exception ioe) {
-      System.out.println("test");
+    } catch (IOException ioe) {
       // We were not successful in our HTTP request
     }
   }

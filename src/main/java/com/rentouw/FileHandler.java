@@ -16,8 +16,8 @@ class FileHandler {
 
   public FileHandler() {
     // Check if settings files are made.
-    if (!checkFile(mangaList)) {
-      File f = new File(mangaList);
+    if (!checkFile(getMangaList())) {
+      File f = new File(getMangaList());
       try {
         f.createNewFile();
       } catch (IOException e) {
@@ -38,9 +38,9 @@ class FileHandler {
     return rootFolder + mangaList;
   }
 
-  public static void setMangaList(String mangaList) {
-    FileHandler.mangaList = mangaList;
-  }
+  //  public static void setMangaList(String mangaList) {
+  //    FileHandler.mangaList = mangaList;
+  //  }
 
   /**
    * Make a folder.
@@ -172,7 +172,7 @@ class FileHandler {
    */
   public static void writeJSON(ArrayList<String[]> array) {
     // Write JSON file
-    try (FileWriter file = new FileWriter("manga.json")) {
+    try (FileWriter file = new FileWriter(getMangaList())) {
       JSONArray jsonArray = new JSONArray();
       JSONObject bigTmp = new JSONObject();
       for (String[] i : array) {
@@ -217,7 +217,7 @@ class FileHandler {
    */
   public static int readChapter(String nameManga, ArrayList<String[]> array) {
     int chapter = 0;
-    if (array == null) array = parseMangaObject(readJsonFile(mangaList));
+    if (array == null) array = parseMangaObject(readJsonFile(getMangaList()));
     for (String[] i : array) {
       if (i[0].equals(nameManga)) {
         chapter = Integer.parseInt(i[3]);
@@ -246,7 +246,7 @@ class FileHandler {
    * @param downloadBool boolean state for manga.
    */
   public static void writeManga(String name, String url, boolean downloadBool) {
-    ArrayList<String[]> array = getFile(mangaList);
+    ArrayList<String[]> array = getFile(getMangaList());
     array.add(
         new String[] {
           name, url, String.valueOf(downloadBool), "0"

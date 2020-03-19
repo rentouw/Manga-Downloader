@@ -10,6 +10,7 @@ class Main {
     Scanner input = new Scanner(System.in);
     int value;
     readConfig();
+    new FileHandler();
     while (true) {
       System.out.print(
           "        MANGA DOWNLOADER\n"
