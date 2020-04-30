@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -20,7 +21,11 @@ class Convert {
     for (int i = 0; i < FileHandler.readChapter(nameManga, array); i++) {
       if (i >= 10 && i < 100) map_prefix = "0";
       else if (i >= 100) map_prefix = "";
-      if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")) {
+      if (!FileHandler.checkFile(cbzFolder + nameManga + "_" + map_prefix + i + ".cbz")
+              && (FileHandler.checkFile(
+                  FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i + "/000.png"))
+          || FileHandler.checkFile(
+              FileHandler.getRootFolder() + nameManga + "/" + map_prefix + i + "/000.jpg")) {
         System.out.println(
             "Making "
                 + FileHandler.getRootFolder()
@@ -82,11 +87,14 @@ class Convert {
     try {
       Process p = Runtime.getRuntime().exec("file " + f.getAbsolutePath());
       String output = new BufferedReader(new InputStreamReader(p.getInputStream())).readLine();
-      if (output.contains("PNG")) f.renameTo(new File(f.getPath().replace(".jpg", "") + ".png"));
-      else if (output.contains("JPEG"))
-        f.renameTo(new File(f.getPath().replace(".jpg", "") + ".jpg"));
+      if (output.contains("PNG")) {
+        Runtime.getRuntime().exec("optipng " + f.getAbsolutePath());
+        f.renameTo(new File(f.getPath().replace(".jpg", "") + ".png"));
+      } else if (output.contains("JPEG"))
+        Runtime.getRuntime().exec("jpegoptim " + f.getAbsolutePath());
+      f.renameTo(new File(f.getPath().replace(".jpg", "") + ".jpg"));
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println(Arrays.toString(e.getStackTrace()));
     }
   }
 }

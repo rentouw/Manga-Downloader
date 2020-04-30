@@ -47,7 +47,7 @@ class Utils {
     if (!FileHandler.checkByUrl(url)) {
       String[] urlList = url.split("/");
       if (urlList[2].equals("manganelo.com") || urlList[2].equals("mangakakalot.com")) {
-        String name = urlList[4];
+        String name = urlList[3];
         String correct = Utils.read("\tIs the name of the manga " + name + " ? (Y/n): ");
         if (correct.equals("n")) {
           name = Utils.read("\tThan what is the name ?:");

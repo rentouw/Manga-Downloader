@@ -24,27 +24,31 @@ class SpiderLeg {
    */
   public void crawl(String url) {
     try {
+      Connection.Response response = Jsoup.connect(url).followRedirects(true).execute();
+      url = response.url().toString();
       Connection connection = Jsoup.connect(url).userAgent(USER_AGENT);
       Document htmlDocument = connection.get();
       if (!connection.response().contentType().contains("text/html")) {
         return;
       }
-      Elements linksOnPage = htmlDocument.select("a[href]");
-      Elements imgsOnPage = htmlDocument.getElementsByAttribute("title").select("img");
-      for (Element img : imgsOnPage) {
-        if (img.parent().hasClass("container-chapter-reader")
-            || img.parent().hasClass("vung-doc")) {
-          if (img.attr("src") != null) {
-            imgs.add(img.attr("src"));
-          } else {
-            imgs.add(img.attr("data-src"));
+      if (connection.response().statusCode() == 200) {
+        Elements linksOnPage = htmlDocument.select("a[href]");
+        Elements imgsOnPage = htmlDocument.getElementsByAttribute("title").select("img");
+        for (Element img : imgsOnPage) {
+          if (img.parent().hasClass("container-chapter-reader")
+              || img.parent().hasClass("vung-doc")) {
+            if (img.attr("src") != null) {
+              imgs.add(img.attr("src"));
+            } else {
+              imgs.add(img.attr("data-src"));
+            }
           }
         }
-      }
-      for (Element link : linksOnPage) {
-        if (link.parents().hasClass("panel-story-chapter-list")
-            || link.parents().hasClass("chapter-list")) {
-          this.links.add(link.absUrl("href"));
+        for (Element link : linksOnPage) {
+          if (link.parents().hasClass("panel-story-chapter-list")
+              || link.parents().hasClass("chapter-list")) {
+            this.links.add(link.absUrl("href"));
+          }
         }
       }
     } catch (IOException ioe) {
