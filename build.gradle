@@ -10,7 +10,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.jsoup:jsoup:1.12.1'
+    // jsoup HTML parser library @ https://jsoup.org/
+    compile 'org.jsoup:jsoup:1.13.1'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 }
 

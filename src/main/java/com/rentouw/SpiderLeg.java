@@ -37,10 +37,21 @@ class SpiderLeg {
         for (Element img : imgsOnPage) {
           if (img.parent().hasClass("container-chapter-reader")
               || img.parent().hasClass("vung-doc")) {
+            String TMPimgurl;
             if (img.attr("src") != null) {
-              imgs.add(img.attr("src"));
+              TMPimgurl = img.attr("src");
+              TMPimgurl = TMPimgurl.replace("https://s5.mkklcdnv5.com", "https://bu.mkklcdnbuv1.com");
+              TMPimgurl = TMPimgurl.replace("https://s3.mkklcdnv3.com", "https://bu.mkklcdnbuv1.com");
+              TMPimgurl = TMPimgurl.replace("https://s7.mkklcdnv7.com", "https://bu.mkklcdnbuv1.com");
+              TMPimgurl = TMPimgurl.replace("https://s41.mkklcdnv41.com/mangakakalot/d1/dnha19771568647794", "https://bu.mkklcdnbuv1.com/mangakakalot/t1/tensei_shitara_slime_datta_ken");
+              imgs.add(TMPimgurl);
             } else {
-              imgs.add(img.attr("data-src"));
+              TMPimgurl = img.attr("data-src");
+              TMPimgurl = TMPimgurl.replace("https://s5.mkklcdnv5.com", "https://bu.mkklcdnbuv1.com");
+              TMPimgurl = TMPimgurl.replace("https://s3.mkklcdnv3.com", "https://bu.mkklcdnbuv1.com");
+              TMPimgurl = TMPimgurl.replace("https://s7.mkklcdnv7.com", "https://bu.mkklcdnbuv1.com");
+              TMPimgurl = TMPimgurl.replace("https://s41.mkklcdnv41.com/mangakakalot/d1/dnha19771568647794", "https://bu.mkklcdnbuv1.com/mangakakalot/t1/tensei_shitara_slime_datta_ken");
+              imgs.add(TMPimgurl);
             }
           }
         }
@@ -50,6 +61,8 @@ class SpiderLeg {
             this.links.add(link.absUrl("href"));
           }
         }
+      } else {
+        System.out.println("ERROR CODE=" + connection.response().statusCode());
       }
     } catch (IOException ioe) {
       // We were not successful in our HTTP request

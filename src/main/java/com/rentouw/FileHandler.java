@@ -12,7 +12,7 @@ import org.json.simple.parser.ParseException;
 
 class FileHandler {
   private static String rootFolder = "./";
-  private static String mangaList = "manga.json";
+  private static final String mangaList = "manga.json";
 
   public FileHandler() {
     // Check if settings files are made.
@@ -46,10 +46,9 @@ class FileHandler {
    * Make a folder.
    *
    * @param path Location for your new map.
-   * @return boolean for folder made.
    */
-  public static boolean makePath(String path) {
-    return new File(path).mkdirs();
+  public static void makePath(String path) {
+    new File(path).mkdirs();
   }
 
   /**

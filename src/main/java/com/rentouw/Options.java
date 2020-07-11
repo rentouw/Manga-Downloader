@@ -45,7 +45,7 @@ public class Options {
   /** Change location method */
   protected static void changeLocation(String location) {
     if (location != null) {
-      if (!location.substring(location.length() - 1).equals("/")) location = location + "/";
+      if (!location.endsWith("/")) location = location + "/";
       FileHandler.setRootFolder(location);
     }
   }
