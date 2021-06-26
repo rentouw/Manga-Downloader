@@ -41,29 +41,9 @@ class SpiderLeg {
             String TMPimgurl;
             if (img.attr("src") != null) {
               TMPimgurl = img.attr("src");
-              TMPimgurl =
-                  TMPimgurl.replace("https://s5.mkklcdnv5.com", "https://bu.mkklcdnbuv1.com");
-              TMPimgurl =
-                  TMPimgurl.replace("https://s3.mkklcdnv3.com", "https://bu.mkklcdnbuv1.com");
-              TMPimgurl =
-                  TMPimgurl.replace("https://s7.mkklcdnv7.com", "https://bu.mkklcdnbuv1.com");
-              TMPimgurl =
-                  TMPimgurl.replace(
-                      "https://s41.mkklcdnv41.com/mangakakalot/d1/dnha19771568647794",
-                      "https://bu.mkklcdnbuv1.com/mangakakalot/t1/tensei_shitara_slime_datta_ken");
               imgs.add(TMPimgurl);
             } else {
               TMPimgurl = img.attr("data-src");
-              TMPimgurl =
-                  TMPimgurl.replace("https://s5.mkklcdnv5.com", "https://bu.mkklcdnbuv1.com");
-              TMPimgurl =
-                  TMPimgurl.replace("https://s3.mkklcdnv3.com", "https://bu.mkklcdnbuv1.com");
-              TMPimgurl =
-                  TMPimgurl.replace("https://s7.mkklcdnv7.com", "https://bu.mkklcdnbuv1.com");
-              TMPimgurl =
-                  TMPimgurl.replace(
-                      "https://s41.mkklcdnv41.com/mangakakalot/d1/dnha19771568647794",
-                      "https://bu.mkklcdnbuv1.com/mangakakalot/t1/tensei_shitara_slime_datta_ken");
               imgs.add(TMPimgurl);
             }
           }

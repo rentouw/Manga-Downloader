@@ -145,8 +145,9 @@ class Download extends Thread {
         // This socket type will allow to set user_agent
         URLConnection con = url.openConnection();
 
-        // Setting the user agent
+        // Setting up correct header data.
         con.setRequestProperty("User-Agent", USER_AGENT);
+        con.setRequestProperty("Referer", "https://readmanganato.com/");
 
         // Requesting input data from server
         inputStream = con.getInputStream();
