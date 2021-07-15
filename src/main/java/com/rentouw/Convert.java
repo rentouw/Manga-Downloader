@@ -88,10 +88,10 @@ class Convert {
       Process p = Runtime.getRuntime().exec("file " + f.getAbsolutePath());
       String output = new BufferedReader(new InputStreamReader(p.getInputStream())).readLine();
       if (output.contains("PNG")) {
-        Runtime.getRuntime().exec("optipng " + f.getAbsolutePath());
+//        Runtime.getRuntime().exec("optipng " + f.getAbsolutePath());
         f.renameTo(new File(f.getPath().replace(".jpg", "") + ".png"));
       } else if (output.contains("JPEG"))
-        Runtime.getRuntime().exec("jpegoptim " + f.getAbsolutePath());
+//        Runtime.getRuntime().exec("jpegoptim " + f.getAbsolutePath());
       f.renameTo(new File(f.getPath().replace(".jpg", "") + ".jpg"));
     } catch (IOException e) {
       System.out.println(Arrays.toString(e.getStackTrace()));

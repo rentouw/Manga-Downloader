@@ -20,6 +20,9 @@ class FileHandler {
       File f = new File(getMangaList());
       try {
         f.createNewFile();
+        FileWriter file = new FileWriter(getMangaList());
+        file.write("[{}]");
+        file.flush();
       } catch (IOException e) {
         System.out.println("Error=" + e.getMessage());
       }

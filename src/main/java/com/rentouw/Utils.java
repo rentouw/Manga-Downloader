@@ -46,17 +46,14 @@ class Utils {
     String url = input.nextLine();
     if (!FileHandler.checkByUrl(url)) {
       String[] urlList = url.split("/");
-      if (urlList[2].equals("manganelo.com") || urlList[2].equals("mangakakalot.com")) {
+      if (urlList[2].contains("mangan")) {
         String name = urlList[3];
         String correct = Utils.read("\tIs the name of the manga " + name + " ? (Y/n): ");
         if (correct.equals("n")) {
           name = Utils.read("\tThan what is the name ?:");
         }
         correct = Utils.read("\tWould you like to download " + name + " ? (Y/n): ");
-        boolean downloadBool = true;
-        if (correct.equals("n")) {
-          downloadBool = false;
-        }
+        boolean downloadBool = !correct.equals("n");
         System.out.println("Checking getting urls for " + name);
         if (Download.testUrl(url)) {
           FileHandler.writeManga(name, url, downloadBool);
@@ -64,7 +61,7 @@ class Utils {
           System.out.println("\tSorry seems like there are no images on this site.");
         }
       } else {
-        System.out.println("\tSorry only manganelo or mangakakalot are supported for now.");
+        System.out.println("\tSorry only mangakakalot or any of there ofspring sites are supported for now.");
       }
     } else {
       System.out.println("\tThis url is already in the list.");
