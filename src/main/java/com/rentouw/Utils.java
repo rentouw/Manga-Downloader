@@ -61,7 +61,8 @@ class Utils {
           System.out.println("\tSorry seems like there are no images on this site.");
         }
       } else {
-        System.out.println("\tSorry only mangakakalot or any of there ofspring sites are supported for now.");
+        System.out.println(
+            "\tSorry only mangakakalot or any of there ofspring sites are supported for now.");
       }
     } else {
       System.out.println("\tThis url is already in the list.");
