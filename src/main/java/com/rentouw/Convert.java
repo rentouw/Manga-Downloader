@@ -1,10 +1,11 @@
 package com.rentouw;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -84,17 +85,17 @@ class Convert {
     if (FileHandler.checkFile(jpgFile)) f = new File(jpgFile);
     else if (FileHandler.checkFile(pngFile)) f = new File(pngFile);
     else f = new File(file);
-    try {
-      Process p = Runtime.getRuntime().exec("file " + f.getAbsolutePath());
-      String output = new BufferedReader(new InputStreamReader(p.getInputStream())).readLine();
-      if (output.contains("PNG")) {
-//        Runtime.getRuntime().exec("optipng " + f.getAbsolutePath());
-        f.renameTo(new File(f.getPath().replace(".jpg", "") + ".png"));
-      } else if (output.contains("JPEG"))
+//    try {
+//      Process p = Runtime.getRuntime().exec("file " + f.getAbsolutePath());
+//      String output = new BufferedReader(new InputStreamReader(p.getInputStream())).readLine();
+//      if (output.contains("PNG")) {
+////        Runtime.getRuntime().exec("optipng " + f.getAbsolutePath());
+//        f.renameTo(new File(f.getPath().replace(".jpg", "") + ".png"));
+//      } else if (output.contains("JPEG"))
 //        Runtime.getRuntime().exec("jpegoptim " + f.getAbsolutePath());
       f.renameTo(new File(f.getPath().replace(".jpg", "") + ".jpg"));
-    } catch (IOException e) {
-      System.out.println(Arrays.toString(e.getStackTrace()));
-    }
+//    } catch (IOException e) {
+//      System.out.println(Arrays.toString(e.getStackTrace()));
+//    }
   }
 }
